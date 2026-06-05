@@ -1,0 +1,52 @@
+/* Eremeev Maksim */
+
+#include <stdio.h>
+#include <windows.h>
+
+#define MAX 3
+INT P[MAX] = {1, 2, 3};
+
+VOID Store( VOID )
+{
+	INT i;
+	FILE *F;
+	F = fopen("PEREST.TXT", "a");/* а - дозапись в конец файла*/
+	if (F == NULL)
+		return;
+	for (i = 0; i < MAX; i++)
+		fprintf(F, "%d%s", P[i], i < MAX - 1 ? " " : "");
+	fprintf(F, "\n");
+	fclose(F);
+}
+
+VOID Swap( INT *A, INT *B )
+{
+	INT tmp = *A;
+
+	*A = *B;
+	*B = tmp;
+}
+
+VOID Go( INT Pos )
+{
+	INT i;
+
+	if (Pos == MAX)
+		Store();
+	else
+	{
+		for (i = Pos; i < MAX; i++)
+		{
+			Swap(&P[Pos], &P[i]);
+			Go(Pos + 1);
+			Swap(&P[Pos], &P[i]);
+		}	
+	}
+}
+
+VOID main(VOID)
+{
+	Go(0);
+	return;
+
+}
