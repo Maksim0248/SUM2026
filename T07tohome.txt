@@ -1,0 +1,260 @@
+/* Eremeev Maksim, 09-3, 06.06.2026 */
+
+#include <windows.h>
+#include <math.h>
+#include "globe.h"
+#define pi 3.14159265359
+#define GLB_GRID_W 10
+#define GLB_GRID_H 20
+
+static VEC GLB_Geom[GLB_GRID_H][GLB_GRID_W];
+static int GLB_Ws, GLB_Hs;
+
+VEC RotateZ( VEC P, DBL Angle )
+{
+  VEC NewP;
+  DBL a = Angle * pi / 180, si = sin(a), co = cos(a);
+ 
+  NewP.X = P.X * co - P.Y * si;
+  NewP.Y = P.X * si + P.Y * co;
+  NewP.Z = P.Z;
+  return NewP;
+}
+
+VEC RotateX( VEC P, DBL Angle )
+{
+  VEC NewP;
+  DBL a = Angle * pi / 180, si = sin(a), co = cos(a);
+ 
+  NewP.X = P.X;
+  NewP.Y = P.Y * co - P.Z * si;
+  NewP.Z = P.Y * si + P.Z * co;
+  return NewP;
+}
+
+VEC RotateY( VEC P, DBL Angle )
+{
+  VEC NewP;
+  DBL a = Angle * pi / 180, si = sin(a), co = cos(a);
+ 
+  NewP.X = P.Z * si + P.X * co;
+  NewP.Y = P.Y;
+  NewP.Z = P.Z * co - P.X * si;
+  return NewP;
+}
+
+
+VOID GLB_Init( DBL R )
+{
+  int i, j, a = 35;
+
+
+  for (i = 0; i < GLB_GRID_H; i++)
+    for (j = 0; j < GLB_GRID_W; j++)
+    {
+      DBL theta = i * pi / GLB_GRID_H, phi = j * 2 * pi / (GLB_GRID_W - 1);
+ 
+      GLB_Geom[i][j].X = R * sin(theta) * sin(phi);
+      GLB_Geom[i][j].Y = R * cos(theta);
+      GLB_Geom[i][j].Z = R * sin(theta) * cos(phi);
+      GLB_Geom[i][j] = RotateZ(GLB_Geom[i][j], a);
+      GLB_Geom[i][j] = RotateY(GLB_Geom[i][j], a);
+    }
+} 
+
+VOID GLB_Draw( HDC hDC )
+{
+  int i, j, s = 3, t;
+
+  static POINT pnts[GLB_GRID_H][GLB_GRID_W];  /*<-- массив с проекциями точек*/
+
+  for (i = 0; i < GLB_GRID_H; i++)
+  {
+    for (j = 0; j < GLB_GRID_W; j++)
+    {
+      pnts[i][j].x = (INT)(GLB_Ws / 2 + GLB_Geom[i][j].X);
+      pnts[i][j].y = (INT)(GLB_Hs / 2 - GLB_Geom[i][j].Y);
+    }
+  }
+
+    
+  for (i = 0; i < GLB_GRID_H; i++)
+    for (j = 0; j < GLB_GRID_W; j++)
+      Ellipse(hDC, pnts[i][j].x - s, pnts[i][j].y - s, pnts[i][j].x + s, pnts[i][j].y + s);
+
+  for (i = 0; i < GLB_GRID_H; i++)
+  {
+    MoveToEx(hDC, pnts[i][0].x, pnts[i][0].y, NULL);
+    for (j = 1; j < GLB_GRID_W; j++)
+    {
+      LineTo(hDC, pnts[i][j].x, pnts[i][j].y);
+    }
+  }
+
+  for (j = 0; j < GLB_GRID_W; j++)
+  {
+    MoveToEx(hDC, pnts[0][j].x, pnts[0][j].y, NULL);
+    for (i = 1; i < GLB_GRID_H; i++)
+    {
+      LineTo(hDC, pnts[i][j].x, pnts[i][j].y);
+    }
+  }
+
+
+}
+
+VOID GLB_Resize( INT Ws, INT Hs )
+{
+  GLB_Ws = Ws;
+  GLB_Hs = Hs;
+}
+
+/* Eremeev Maksim, 09-3, 06.06.2026 */
+
+#ifndef __globe_h_
+#define __globe_h_
+
+typedef double DBL;
+
+typedef struct
+{
+  DBL X, Y, Z;
+} VEC;
+VOID GLB_Init( DBL R );
+VOID GLB_Draw( HDC hDC );
+VOID GLB_Resize( INT W, INT H );
+
+#endif /*__globe_h_*/
+
+/* Eremeev Maksim, 09-3, 06.06.2026 */
+
+#include <windows.h>
+#include <math.h>
+#include "globe.h"
+
+#define WND_CLASS_NAME "cgsg"
+#define PI 3.14159265359
+LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );
+
+INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine, INT ShowCmd )
+{
+  WNDCLASS wc;
+  HWND hWnd;
+  MSG msg;
+
+  wc.style = CS_VREDRAW | CS_HREDRAW;
+  wc.cbClsExtra = 0;
+  wc.cbWndExtra = 0;
+  wc.hbrBackground = (HBRUSH)COLOR_WINDOW;
+  wc.hCursor = LoadCursor(NULL, IDC_HAND);
+  wc.hIcon = LoadIcon(NULL, IDI_SHIELD);
+  wc.hInstance = hInstance;
+  wc.lpszMenuName = NULL;
+  wc.lpszClassName = WND_CLASS_NAME;
+  wc.lpfnWndProc = MyWindowFunc;
+
+  if (!RegisterClass(&wc))
+  {
+    MessageBox(NULL, "Error", "ERROR", MB_YESNO | MB_ICONSTOP);
+    return 0;
+  }
+   hWnd = CreateWindow(WND_CLASS_NAME, "SummerPractice2026", WS_CLIPCHILDREN | WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+    CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, hInstance, NULL);
+ 
+  CreateWindow("BUTTON", "Close window", WS_CHILD | WS_VISIBLE,
+    10, 10, 100, 30, hWnd, (HMENU)123, hInstance, NULL);
+
+  UpdateWindow(hWnd);
+
+  while (GetMessage(&msg, NULL, 0, 0))
+  {
+    TranslateMessage(&msg);
+    DispatchMessage(&msg);
+  }
+  return msg.wParam;
+}
+
+
+LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam )
+{
+  PAINTSTRUCT ps;
+  static SYSTEMTIME st;
+  static INT W, H;
+  char tx[50];
+  CHAR Buf[100];
+  MINMAXINFO *minmax;
+
+  static int Xc, Yc, lenm = 200, lenh = 100, x, y;
+
+  /*Descriptors*/
+  static HDC hDC;/*контекст окна*/
+
+  static HDC hMemDC; /*контекст растового изображения в памяти*/
+  static HBITMAP hBm; /*растовое изображение(буффер) в памяти*/
+
+  
+  switch (Msg)
+  {
+  case WM_CREATE:
+    hDC = GetDC(hWnd);
+    hMemDC = CreateCompatibleDC(hDC);/*копия контекста экрана*/
+    SetTimer(hWnd, 30, 10, NULL);
+    GLB_Init(300);
+    ReleaseDC(hWnd, hDC);
+    hBm = NULL;
+    return 0;
+
+  case WM_SIZE:/* идет сразу после create */
+    W = LOWORD(lParam);
+    H = HIWORD(lParam);
+    Xc = W / 2 - 2;
+    Yc = H / 2 + 5;
+    GLB_Resize(W, H);
+    if (hBm != NULL)
+      DeleteObject(hBm);
+    hDC = GetDC(hWnd);
+    hBm = CreateCompatibleBitmap(hDC, W, H);/*функция создает картинку в памяти*/
+    SelectObject(hMemDC, hBm);
+    SendMessage(hWnd, WM_TIMER, 30, 0);
+
+    ReleaseDC(hWnd, hDC);
+
+    return 0;
+  case WM_TIMER:
+    hDC = GetDC(hWnd);
+    Rectangle(hMemDC, 0, 0, W, H);
+    GLB_Draw(hMemDC);
+    
+    BitBlt(hDC, 0, 0, W, H, hMemDC, 0, 0, SRCCOPY);
+    ReleaseDC(hWnd, hDC);
+    return 0;
+  case WM_KEYDOWN:/* + выход*/
+    return 0;
+  case WM_COMMAND:
+    if (LOWORD(wParam) == 123)
+      SendMessage(hWnd, WM_CLOSE, 0, 0);
+    return 0;
+  case WM_PAINT:
+    hDC = BeginPaint(hWnd, &ps);
+    BitBlt(hDC, 0, 0, W, H, hMemDC, 0, 0, SRCCOPY);
+    EndPaint(hWnd, &ps);
+    return 0;
+  case WM_ERASEBKGND:
+    return 1;
+
+  case WM_MOUSEMOVE:
+    return 0;
+
+  case WM_CLOSE:
+    if (MessageBox(hWnd, "Are you sure close window?", "Exit", MB_YESNO | MB_ICONQUESTION) == IDNO)
+      return 0;
+    break;
+
+  case WM_DESTROY:
+    DeleteObject(hBm);
+        KillTimer(hWnd, 30);
+    PostMessage(NULL, WM_QUIT, 30, 0);
+    return 0;
+  }
+  return DefWindowProc(hWnd, Msg, wParam, lParam);
+}
