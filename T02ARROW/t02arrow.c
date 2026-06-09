@@ -65,7 +65,7 @@ void DrawArrow( HWND hWnd, HDC hDC, INT Xc, INT Yc, INT L, INT W, INT H )
 
 void DrawArrow2( HWND hWnd, HDC hDC, INT Xc, INT Yc, INT L, INT W, INT H )
 {
-  POINT pts[7] = {{-4, 0}, {0, -4}, {8, 4}, {10, 2}, {12, 12}, {2, 10}, {4, 8}};
+  POINT pts[7] = {{-4, -10}, {4, -10}, {4, 6}, {10, 6}, {0, 14}, {-10, 6}, {-4, 6}};
   POINT pts_res[sizeof(pts) / sizeof(pts[0])]; 
   int N = sizeof(pts) / sizeof(pts[0]);
   POINT pt;
@@ -76,14 +76,14 @@ void DrawArrow2( HWND hWnd, HDC hDC, INT Xc, INT Yc, INT L, INT W, INT H )
   GetCursorPos(&pt);
   ScreenToClient(hWnd, &pt);
   len = hypot(pt.x - Xc, pt.y - Yc);
-  x = Xc + (pt.x - Xc)* L / len;
-  y = Yc + (pt.y - Yc)* L / len;
+  x = Xc + (pt.x - Xc) * L / len;
+  y = Yc + (pt.y - Yc) * L / len;
   /*MoveToEx(hDC, Xc, Yc, NULL);
   LineTo(hDC, x, y);*/
   for (i = 0; i < N; i++)
   {
     pts_res[i].x = Xc + pts[i].x * (pt.y - Yc)/len + pts[i].y * (pt.x - Xc)/len;
-    pts_res[i].y = Yc + pts[i].y * (pt.y - Yc)/len + pts[i].x * (pt.x - Xc)/len;
+    pts_res[i].y = Yc + pts[i].y * (pt.y - Yc)/len - pts[i].x * (pt.x - Xc)/len;
   }
   Polygon(hDC, pts_res, N);
 }
@@ -157,7 +157,7 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
       SelectObject(hDC, GetStockObject(DC_PEN));
       SetDCPenColor(hDC, RGB(rand() % 255, rand() % 255, rand() % 255));
 
-      DrawArrow2(hWnd, hDC, rand() % W, rand() % H, 30, W, H );
+      DrawArrow2(hWnd, hDC, rand() % W, rand() % H, 50, W, H );
       DrawArrow(hWnd, hDC, rand() % W, rand() % H, 30, W, H );
     }
     ReleaseDC(hWnd, hDC);
