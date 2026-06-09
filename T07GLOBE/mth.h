@@ -25,6 +25,16 @@ typedef struct
 
 typedef struct
 {
+  DBL X, Y, Z, W;
+} VEC4;
+
+typedef struct
+{
+  DBL X, Y;
+} VEC2;
+
+typedef struct
+{
   DBL A[4][4];
 } MATR;
 
@@ -65,6 +75,12 @@ __inline VEC VecDivNum( VEC V1, DBL N )
   return VecSet(V1.X / N, V1.Y / N, V1.Z / N);
 }
 
+__inline VEC VecNeg( VEC V )
+ {
+  return VecSet(-V.X, -V.Y, -V.Z);
+}
+
+
 __inline DBL VecDotVec( VEC V1, VEC V2 )
 {
   return V1.X * V2.X + V1.Y * V2.Y + V1.Z * V2.Z;
@@ -85,23 +101,63 @@ __inline DBL VecLen2( VEC V )
   return len;
 }
 
-/*VEC VecCrossVec( VEC V1, VEC V2 )
+__inline VEC VecCrossVec( VEC V1, VEC V2 )
 {
-  VEC C;
-
-
-  return
-}*/
+  return VecSet(V1.Y * V2.Z - V1.Z * V2.Y, V1.Z * V2.X - V1.X * V2.Z, V1.X * V2.Y - V1.Y * V2.X);
+}
 
 __inline VEC VecNormalize( VEC V )   /*V/|V|*/
 {
   DBL len = VecDotVec(V, V);
- 
+
   if (len == 1 || len == 0)
     return V;
   return VecDivNum(V, sqrt(len));
 }
 
+__inline VEC PointTransform( VEC V, MATR M )   /*(V, 1) * M4x3*/
+{
+  return VecSet(V.X * M.A[0][0] + V.Y * M.A[1][0] + V.Z * M.A[2][0] + 1 * M.A[3][0],
+                V.X * M.A[0][1] + V.Y * M.A[1][1] + V.Z * M.A[2][1] + 1 * M.A[3][1],
+                V.X * M.A[0][2] + V.Y * M.A[1][2] + V.Z * M.A[2][2] + 1 * M.A[3][2]);
+}
+
+__inline VEC VectorTransform( VEC V, MATR M ) /*V * M3x3*/
+{ 
+  return VecSet(V.X * M.A[0][0] + V.Y * M.A[1][0] + V.Z * M.A[2][0],
+                V.X * M.A[0][1] + V.Y * M.A[1][1] + V.Z * M.A[2][1],
+                V.X * M.A[0][2] + V.Y * M.A[1][2] + V.Z * M.A[2][2]);
+}
+__inline VEC VecMulMatr( VEC V, MATR M )       /*V * M4x4 / w*/
+{ 
+  DBL w = V.X * M.A[0][3] + V.Y * M.A[1][3] + V.Z * M.A[2][3] + M.A[3][3];
+ 
+  return VecSet((V.X * M.A[0][0] + V.Y * M.A[1][0] + V.Z * M.A[2][0] + M.A[3][0]) / w,
+         (V.X * M.A[0][1] + V.Y * M.A[1][1] + V.Z * M.A[2][1] + M.A[3][1]) / w,
+         (V.X * M.A[0][2] + V.Y * M.A[1][2] + V.Z * M.A[2][2] + M.A[3][2]) / w);
+}
+
+
+
+
+
+/*Matrix*/
+
+/* единичная матрица */
+static MATR UnitMatrix =
+{
+  {
+      {1, 0, 0, 0},
+      {0, 1, 0, 0},
+      {0, 0, 1, 0},
+      {0, 0, 0, 1},
+  }
+};
+
+__inline MATR MatrIdentity( VOID )
+{
+  return UnitMatrix;
+}
 
 __inline MATR MatrSet( DBL A00, DBL A01, DBL A02, DBL A03,
               DBL A10, DBL A11, DBL A12, DBL A13,
@@ -120,30 +176,45 @@ __inline MATR MatrSet( DBL A00, DBL A01, DBL A02, DBL A03,
   return m;
 }
 
-/* единичная матрица */
-static MATR UnitMatrix =
-{
-  {
-      {1, 0, 0, 0},
-      {0, 1, 0, 0},
-      {0, 0, 1, 0},
-      {0, 0, 0, 1},
-  }
-};
- 
-__inline MATR MatrIdentity( VOID )
-{
-  return UnitMatrix;
-}
 
-__inline MATR MatrTranslate( VEC T )
+__inline MATR MatrTranslate( VEC T )/*перенос*/
 {
   return MatrSet(1, 0, 0, 0,
                  0, 1, 0, 0,
                  0, 0, 1, 0,
                  T.X, T.Y, T.Z, 1);
 }
+__inline MATR MatrScale( VEC S )/*умножение*/
+{
+  return MatrSet(S.X, 0, 0, 0,
+                 0, S.Y, 0, 0,
+                 0, 0, S.Z, 0,
+                 0, 0, 0, 1);
+}
 
+__inline MATR MatrRotateZ( DBL AngleInDegree )
+{
+  return MatrSet(cos(AngleInDegree), sin(AngleInDegree), 0, 0,
+                 -sin(AngleInDegree), cos(AngleInDegree), 0, 0,
+                 0, 0, 1, 0,
+                 0, 0, 0, 1);
+}
+
+__inline MATR MatrRotateX( DBL AngleInDegree )
+{
+  return MatrSet(1, 0, 0, 0,
+                 0, cos(AngleInDegree), sin(AngleInDegree), 0,
+                 0, -sin(AngleInDegree), cos(AngleInDegree), 0,
+                 0, 0, 0, 1);
+}
+
+__inline MATR MatrRotateY( DBL AngleInDegree )
+{
+  return MatrSet(cos(AngleInDegree), 0, -sin(AngleInDegree), 0,
+                 0, 1, 0, 0,
+                 sin(AngleInDegree), 0, cos(AngleInDegree), 0,
+                 0, 0, 0, 1);
+}
 __inline MATR MatrMulMatr( MATR M1, MATR M2 )
 {
   int i, j, k;
@@ -270,6 +341,7 @@ __inline MATR MatrInverse( MATR M ) /* обратная матрица */
  
   return r;
 }
+
 
 
 #endif /*__mth_h_*/

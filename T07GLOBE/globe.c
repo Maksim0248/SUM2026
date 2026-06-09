@@ -111,21 +111,23 @@ VOID GLB_Draw( HDC hDC )
   VEC  L;
   DBL len, si, t = clock() / (DBL)CLOCKS_PER_SEC;
   static POINT pnts[GLB_GRID_H][GLB_GRID_W];  /*<-- массив с проекциями точек*/
-
-  GLB_Init(0.3);
+  MATR m;
+  
   si = sin(t);
+  m = MatrMulMatr(MatrRotateX(si * 3), MatrTranslate(VecSet(0, 0.1, -1)));
+  //GLB_Init(0.3);
   for (i = 0; i < GLB_GRID_H; i++)
   {
     for (j = 0; j < GLB_GRID_W; j++)
     {
-      VEC P = GLB_Geom[i][j];
+      VEC P = PointTransform(GLB_Geom[i][j], m);
       DBL xp, yp;
 
       /*rotate*/
-      P = RotateZ(P, (GLB_A * si * 5));
+      /*P = RotateZ(P, (GLB_A * si * 5));
       P  = RotateY(P, GLB_A * si);
       P = RotateX(P, GLB_A * si * 3);
-
+*/
       P.Z -= 3;
 
       /*project point to plane*/
@@ -169,38 +171,27 @@ VOID GLB_Draw( HDC hDC )
   }
 
   /*facets*/
-  L.X = 1;
-  L.Y = 1;
-  L.Z = 1;
 
   /*normalize*/
-  len = sqrt(L.X * L.X + L.Y * L.Y + L.Z * L.Z);
-  L.X /= len;
-  L.Y /= len;
-  L.Z /= len;
+
+  L = VecNormalize(VecSet(0, 0, -1));
 
   SelectObject(hDC, GetStockObject(DC_BRUSH));
-  SetDCBrushColor(hDC, RGB(250, 255, 0));
   for (i = 0; i < GLB_GRID_H - 1; i++)
     for (j = 0; j < GLB_GRID_W - 1; j++)
     {
       VEC N = GLB_GeomN[i][j];
       DBL NL;
       POINT pts[4];
-      VEC C = {0.9, 0.2, 0.1};/* color*/
+      VEC C = {1.2, 0.4, 0.6};/* color*/
 
-      /*N = RotateZ(N, GLB_A * sin(t) * 5);
-      N = RotateY(N, GLB_A * sin(t));
-      N = RotateX(N, GLB_A * sin(t) * 3);*/
+      N = VectorTransform(GLB_GeomN[i][j], m);
 
-      NL = N.X * L.X + N.Y * L.Y + N.Z * L.Z;/*cos(N^L)*/
-      if (NL <= 0.30)
-        NL = 0.30;
+      NL = VecDotVec(N, L);/*cos(N^L)*/
+      if (NL <= 0.4)
+        NL = 0.4;
 
-      C.X *= NL;
-      C.Y *= NL;
-      C.Z *= NL;
-
+      C = VecMulNum(C, NL);
       pts[0] = pnts[i][j];
       pts[1] = pnts[i][j + 1];
       pts[2] = pnts[i + 1][j + 1];
