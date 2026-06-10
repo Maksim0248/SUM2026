@@ -5,7 +5,7 @@
 #include "def.h"
 
 #define WND_CLASS_NAME "cgsg"
-#include "anim/rnd.h"
+#include "anim/rnd/rnd.h"
 
 LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );
 
@@ -59,7 +59,6 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
   MSG msg;
 
   SetDbgMemHooks();
-  malloc(100);
 
   wc.style = CS_VREDRAW | CS_HREDRAW;
   wc.cbClsExtra = 0;
@@ -125,6 +124,7 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
     SendMessage(hWnd, WM_TIMER, 30, 0);
     return 0;
   case WM_TIMER:
+    //ME3_RndCamSet(VecSet(10, 10, 5), VecSet(0, 0, 0), VecSet(0, 1, 0));
     ME3_RndStart();
     ME3_RndEnd();
     hDC = GetDC(hWnd);

@@ -5,10 +5,11 @@
  */
 
 #include "rnd.h"
+#include <string.h>
 
 VOID ME3_RndInit( HWND hWnd )
 {
-
+  ME3_RndCamSet(VecSet(25, 20, 30), VecSet(0, 0, 0), VecSet(0, 1, 0));
   ME3_hRndWnd = hWnd;
   ME3_hRndDCFrame = CreateCompatibleDC(GetDC(hWnd));
 }
@@ -21,31 +22,34 @@ VOID ME3_RndClose( VOID )
 
 VOID ME3_RndStart( VOID )
 {
-  VEC p1, p2, p;
-  MATR m;
-  POINT pnts[2];
+  me3PRIM Pr, Pr1, Pr2;
   Rectangle(ME3_hRndDCFrame, 0, 0, ME3_RndFrameW, ME3_RndFrameH);
-  /*SelectObject(ME3_hRndDCFrame, GetStockObject(BLACK_BRUSH));
   
-  Rectangle(ME3_hRndDCFrame, 50, 50, 10, 10);
-  SelectObject(ME3_hRndDCFrame, GetStockObject(WHITE_BRUSH));*/
- 
-  ME3_RndCamSet(VecSet(5, 10, 5), VecSet(0, 0, 0), VecSet(0, 1, 0));
-  m = ME3_RndMatrVP;
- 
-  p1 = VecSet(0, 0, 0);
-  p2 = VecSet(1, 0, 0);
- 
-  p = VecMulMatr(p1, m);
-  pnts[0].x = (INT)((p.X + 1) * ME3_RndFrameW / 2);
-  pnts[0].y = (INT)((-p.Y + 1) * ME3_RndFrameH / 2);
- 
-  p = VecMulMatr(p2, m);
-  pnts[1].x = (INT)((p.X + 1) * ME3_RndFrameW / 2);
-  pnts[1].y = (INT)((-p.Y + 1) * ME3_RndFrameH / 2);
- 
-  MoveToEx(ME3_hRndDCFrame, pnts[0].x, pnts[0].y, NULL);
-  LineTo(ME3_hRndDCFrame, pnts[1].x, pnts[1].y);
+  if (ME3_RndPrimCreate(&Pr, 4, 6))
+  {
+    Pr.V[0].P = VecSet(0, 0, 0);
+    Pr.V[1].P = VecSet(2, 0, 0);
+    Pr.V[2].P = VecSet(0, 2, 0);
+    Pr.V[3].P = VecSet(2, 2, 0);
+
+    Pr.I[0] = 0;
+    Pr.I[1] = 1;
+    Pr.I[2] = 2;
+
+    Pr.I[3] = 2;
+    Pr.I[4] = 1;
+    Pr.I[5] = 3;
+  }
+  ME3_RndPrimDraw(&Pr, MatrIdentity());
+
+  ME3_RndPrimCreateSphere(&Pr1, 1, 25, 50);
+  ME3_RndPrimDraw(&Pr1, MatrIdentity());
+
+  ME3_RndPrimLoad(&Pr2, "bin/models/cow.obj");
+  ME3_RndPrimDraw(&Pr2, MatrIdentity());
+  ME3_RndPrimFree(&Pr);
+  ME3_RndPrimFree(&Pr1);
+  ME3_RndPrimFree(&Pr2);
 }
 
 

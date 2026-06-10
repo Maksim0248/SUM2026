@@ -8,7 +8,7 @@
 #define __mth_h_
 
 #include <math.h>
-
+#include <windows.h>
 #include "def.h"
 
 #define PI 3.14159265358979323846

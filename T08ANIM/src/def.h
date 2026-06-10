@@ -19,7 +19,6 @@
 #  define SetDbgMemHooks() ((void)0)
 #endif /* NDEBUG */
 #include <stdlib.h>
-#include <windows.h>
 
 #include "mth/mth.h"
 
