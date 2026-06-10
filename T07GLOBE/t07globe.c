@@ -123,7 +123,7 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
 
   case WM_DESTROY:
     DeleteObject(hBm);
-        KillTimer(hWnd, 30);
+    KillTimer(hWnd, 30);
     PostMessage(NULL, WM_QUIT, 30, 0);
     return 0;
   }

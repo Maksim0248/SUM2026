@@ -7,8 +7,9 @@
 #ifndef __mth_h_
 #define __mth_h_
 
-#include "globe.h"
+#include <math.h>
 
+#include "def.h"
 
 #define PI 3.14159265358979323846
 #define D2R(A) ((A) * (PI / 180.0))
@@ -194,6 +195,7 @@ __inline MATR MatrScale( VEC S )/*умножение*/
 
 __inline MATR MatrRotateZ( DBL AngleInDegree )
 {
+  AngleInDegree = D2R(AngleInDegree);
   return MatrSet(cos(AngleInDegree), sin(AngleInDegree), 0, 0,
                  -sin(AngleInDegree), cos(AngleInDegree), 0, 0,
                  0, 0, 1, 0,
@@ -202,6 +204,7 @@ __inline MATR MatrRotateZ( DBL AngleInDegree )
 
 __inline MATR MatrRotateX( DBL AngleInDegree )
 {
+  AngleInDegree = D2R(AngleInDegree);
   return MatrSet(1, 0, 0, 0,
                  0, cos(AngleInDegree), sin(AngleInDegree), 0,
                  0, -sin(AngleInDegree), cos(AngleInDegree), 0,
@@ -210,9 +213,14 @@ __inline MATR MatrRotateX( DBL AngleInDegree )
 
 __inline MATR MatrRotateY( DBL AngleInDegree )
 {
-  return MatrSet(cos(AngleInDegree), 0, -sin(AngleInDegree), 0,
+  DBL co = cos(AngleInDegree);
+  DBL si = sin(AngleInDegree);
+
+  AngleInDegree = D2R(AngleInDegree);
+
+  return MatrSet(co, 0, -si, 0,
                  0, 1, 0, 0,
-                 sin(AngleInDegree), 0, cos(AngleInDegree), 0,
+                 si, 0, co, 0,
                  0, 0, 0, 1);
 }
 __inline MATR MatrMulMatr( MATR M1, MATR M2 )
@@ -343,5 +351,52 @@ __inline MATR MatrInverse( MATR M ) /* обратная матрица */
 }
 
 
+/* Matrix look-at viewer setup function.
+ * ARGUMENTS:
+ *   - viewer position, look-at point, approximate up direction:
+ *       VEC Loc, At, Up1;
+ * RETURNS:
+ *   (MATR) result matrix.
+ */
+__inline MATR MatrView( VEC Loc, VEC At, VEC Up1 )
+{
+  VEC
+    Dir = VecNormalize(VecSubVec(At, Loc)),
+    Right = VecNormalize(VecCrossVec(Dir, Up1)),
+    Up = VecNormalize(VecCrossVec(Right, Dir));
+  MATR m =
+  {
+    {
+      {Right.X, Up.X, -Dir.X, 0},
+      {Right.Y, Up.Y, -Dir.Y, 0},
+      {Right.Z, Up.Z, -Dir.Z, 0},
+      {-VecDotVec(Loc, Right), -VecDotVec(Loc, Up), VecDotVec(Loc, Dir), 1}
+    }
+  };
+
+  return m;
+} /* End of 'MatrView' function */
+
+/* Perspective (frustum) projection matrix setup function.
+ * ARGUMENTS:
+ *   - frustum side facets coordinates:
+ *       DBL Left, Right, Bottom, Top, Near, Far;
+ * RETURNS:
+ *   (MATR) result matrix.
+ */
+__inline MATR MatrFrustum( DBL Left, DBL Right, DBL Bottom, DBL Top, DBL Near, DBL Far )
+{
+  MATR m =
+  {
+    {
+      {      2 * Near / (Right - Left),                               0,                              0,  0},
+      {                              0,       2 * Near / (Top - Bottom),                              0,  0},
+      {(Right + Left) / (Right - Left), (Top + Bottom) / (Top - Bottom),   -(Far + Near) / (Far - Near), -1},
+      {                              0,                               0, -2 * Near * Far / (Far - Near),  0}
+    }
+  };
+
+  return m;
+} /* End of 'MatrFrustum' function */
 
 #endif /*__mth_h_*/

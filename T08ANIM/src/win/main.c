@@ -5,6 +5,7 @@
 #include "def.h"
 
 #define WND_CLASS_NAME "cgsg"
+#include "anim/rnd.h"
 
 LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );
 
@@ -84,10 +85,17 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
 */
   UpdateWindow(hWnd);
 
-  while (GetMessage(&msg, NULL, 0, 0))
+  while (TRUE)
   {
-    TranslateMessage(&msg);
-    DispatchMessage(&msg);
+    if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+    {
+      if (msg.message == WM_QUIT)
+        break;
+      TranslateMessage(&msg);
+      DispatchMessage(&msg);
+    }
+    else
+      SendMessage(hWnd, WM_TIMER, 30, 0);
   }
   return msg.wParam;
 }
@@ -108,22 +116,20 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
   switch (Msg)
   {
   case WM_CREATE:
-    hDC = GetDC(hWnd);
+    ME3_RndInit(hWnd);
     SetTimer(hWnd, 30, 10, NULL);
-    ReleaseDC(hWnd, hDC);
     return 0;
 
   case WM_SIZE:/* идет сразу после create */
-    W = LOWORD(lParam);
-    H = HIWORD(lParam);
-    Xc = W / 2 - 2;
-    Yc = H / 2 + 5;
+    ME3_RndResize(LOWORD(lParam), HIWORD(lParam));
     SendMessage(hWnd, WM_TIMER, 30, 0);
-
-    ReleaseDC(hWnd, hDC);
-
     return 0;
   case WM_TIMER:
+    ME3_RndStart();
+    ME3_RndEnd();
+    hDC = GetDC(hWnd);
+    ME3_RndCopyFrame(hDC);
+    ReleaseDC(hWnd, hDC);
     return 0;
   case WM_GETMINMAXINFO:
     minmax = (MINMAXINFO *)lParam;
@@ -135,6 +141,7 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
     return 0;
   case WM_PAINT:
     hDC = BeginPaint(hWnd, &ps);
+    ME3_RndCopyFrame(hDC);
     EndPaint(hWnd, &ps);
     return 0;
   case WM_ERASEBKGND:
@@ -144,9 +151,6 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
       FlipFullScreen(hWnd);
     if (wParam == VK_ESCAPE)
       SendMessage(hWnd, WM_DESTROY, 0, 0);
-
-
-
   case WM_MOUSEMOVE:
     return 0;
 
@@ -156,7 +160,7 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
     break;
 
   case WM_DESTROY:
-    KillTimer(hWnd, 30);
+    ME3_RndClose();
     PostMessage(NULL, WM_QUIT, 30, 0);
     return 0;
   }

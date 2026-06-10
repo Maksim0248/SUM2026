@@ -6,8 +6,8 @@
 #include "mth.h"
 
 #define pi 3.14159265359
-#define GLB_GRID_W 15
-#define GLB_GRID_H 30
+#define GLB_GRID_W 50
+#define GLB_GRID_H 100
 
 static DBL GLB_ProjSize = 1, GLB_ProjDist = 2, GLB_Hp, GLB_Wp;/*project plane size*/
 static VEC GLB_Geom[GLB_GRID_H][GLB_GRID_W];
@@ -17,11 +17,10 @@ static int GLB_A = 25;
 
 COLORREF ColorTo255( VEC Color )
 {
-  //VEC RGB;
   INT 
-    R = (INT)Color.X * 255,
-    G = (INT)Color.Y * 255,
-    B = (INT)Color.Z * 255;
+    R = Color.X * 255,
+    G = Color.Y * 255,
+    B = Color.Z * 255;
 
   if (R < 0)
     R = 0;
@@ -93,7 +92,7 @@ VOID GLB_Init( DBL R )
   for (i = 0; i < GLB_GRID_H; i++)
     for (j = 0; j < GLB_GRID_W; j++)
     {
-      DBL theta = i * pi / GLB_GRID_H, phi = j * 2 * pi / (GLB_GRID_W - 1);
+      DBL theta = i * pi / (GLB_GRID_H - 1), phi = j * 2 * pi / (GLB_GRID_W - 1);
       /* normal*/
       GLB_GeomN[i][j].X = sin(theta) * sin(phi);
       GLB_GeomN[i][j].Y = cos(theta);
@@ -123,11 +122,6 @@ VOID GLB_Draw( HDC hDC )
       VEC P = PointTransform(GLB_Geom[i][j], m);
       DBL xp, yp;
 
-      /*rotate*/
-      /*P = RotateZ(P, (GLB_A * si * 5));
-      P  = RotateY(P, GLB_A * si);
-      P = RotateX(P, GLB_A * si * 3);
-*/
       P.Z -= 3;
 
       /*project point to plane*/
@@ -143,32 +137,32 @@ VOID GLB_Draw( HDC hDC )
   SelectObject(hDC, GetStockObject(DC_BRUSH));
   SetDCBrushColor(hDC, RGB(0, 255, 0));
     
-  for (i = 0; i < GLB_GRID_H; i++)
+  /*for (i = 0; i < GLB_GRID_H; i++)
     for (j = 0; j < GLB_GRID_W; j++)
       Ellipse(hDC, pnts[i][j].x - s, pnts[i][j].y - s, pnts[i][j].x + s, pnts[i][j].y + s);
-
+  */
   SelectObject(hDC, GetStockObject(NULL_BRUSH));
-  SelectObject(hDC, GetStockObject(DC_PEN));
+  SelectObject(hDC, GetStockObject(NULL_PEN));
 
-  SetDCPenColor(hDC, RGB(255, 0, 0));
+  //SetDCPenColor(hDC, RGB(255, 0, 0));
 
-  for (i = 0; i < GLB_GRID_H; i++)
+  /*for (i = 0; i < GLB_GRID_H; i++)
   {
     MoveToEx(hDC, pnts[i][0].x, pnts[i][0].y, NULL);
     for (j = 0; j < GLB_GRID_W; j++)
     {
       LineTo(hDC, pnts[i][j].x, pnts[i][j].y);
     }
-  }
+  }*/
 
-  for (j = 0; j < GLB_GRID_W; j++)
+  /*for (j = 0; j < GLB_GRID_W; j++)
   {
     MoveToEx(hDC, pnts[0][j].x, pnts[0][j].y, NULL);
     for (i = 0; i < GLB_GRID_H; i++)
     {
       LineTo(hDC, pnts[i][j].x, pnts[i][j].y);
     }
-  }
+  } */
 
   /*facets*/
 
@@ -183,7 +177,7 @@ VOID GLB_Draw( HDC hDC )
       VEC N = GLB_GeomN[i][j];
       DBL NL;
       POINT pts[4];
-      VEC C = {1.2, 0.4, 0.6};/* color*/
+      VEC C = {0.9, 0.3, 0.4};/* color*/
 
       N = VectorTransform(GLB_GeomN[i][j], m);
 
