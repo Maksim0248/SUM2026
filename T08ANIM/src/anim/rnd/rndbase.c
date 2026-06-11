@@ -9,9 +9,13 @@
 
 VOID ME3_RndInit( HWND hWnd )
 {
-  ME3_RndCamSet(VecSet(25, 20, 30), VecSet(0, 0, 0), VecSet(0, 1, 0));
+  
   ME3_hRndWnd = hWnd;
   ME3_hRndDCFrame = CreateCompatibleDC(GetDC(hWnd));
+
+  ME3_hRndBmFrame = NULL;
+  ME3_RndCamSet(VecSet(25, 20, 30), VecSet(0, 0, 0), VecSet(0, 1, 0));
+
 }
 
 VOID ME3_RndClose( VOID )
@@ -22,10 +26,10 @@ VOID ME3_RndClose( VOID )
 
 VOID ME3_RndStart( VOID )
 {
-  me3PRIM Pr, Pr1, Pr2;
+  //me3PRIM Pr, Pr1, Pr2;
   Rectangle(ME3_hRndDCFrame, 0, 0, ME3_RndFrameW, ME3_RndFrameH);
   
-  if (ME3_RndPrimCreate(&Pr, 4, 6))
+  /*if (ME3_RndPrimCreate(&Pr, 4, 6))
   {
     Pr.V[0].P = VecSet(0, 0, 0);
     Pr.V[1].P = VecSet(2, 0, 0);
@@ -49,7 +53,7 @@ VOID ME3_RndStart( VOID )
   ME3_RndPrimDraw(&Pr2, MatrIdentity());
   ME3_RndPrimFree(&Pr);
   ME3_RndPrimFree(&Pr1);
-  ME3_RndPrimFree(&Pr2);
+  ME3_RndPrimFree(&Pr2);*/
 }
 
 
@@ -75,11 +79,9 @@ VOID ME3_RndResize( INT W, INT H )
  
   SelectObject(ME3_hRndDCFrame, ME3_hRndBmFrame);
  
-  /* сохран€ем размеры */
   ME3_RndFrameW = W;
   ME3_RndFrameH = H;
  
-  /* пересчитываем проекцию */
   ME3_RndProjSet();
 }
 
@@ -104,3 +106,4 @@ VOID ME3_RndCamSet( VEC Loc, VEC At, VEC Up )
   ME3_RndMatrView = MatrView(Loc, At, Up);
   ME3_RndMatrVP = MatrMulMatr(ME3_RndMatrView, ME3_RndMatrProj);
 }
+/**.

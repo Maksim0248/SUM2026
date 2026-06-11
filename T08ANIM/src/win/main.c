@@ -5,7 +5,8 @@
 #include "def.h"
 
 #define WND_CLASS_NAME "cgsg"
-#include "anim/rnd/rnd.h"
+
+#include "units/units.h"
 
 LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );
 
@@ -78,11 +79,12 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
   }
   hWnd = CreateWindow(WND_CLASS_NAME, "SummerPractice2026", WS_CLIPCHILDREN | WS_OVERLAPPEDWINDOW | WS_VISIBLE,
     CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, hInstance, NULL);
- 
-/*  CreateWindow("BUTTON", "Close window", WS_CHILD | WS_VISIBLE,
-    10, 10, 100, 30, hWnd, (HMENU)123, hInstance, NULL);
-*/
+  /*--> WM_CREATE --> WM_SIZE -->*/
+
+
   UpdateWindow(hWnd);
+
+  ME3_AnimUnitAdd(ME3_UnitCreateBall());
 
   while (TRUE)
   {
@@ -115,16 +117,17 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
   switch (Msg)
   {
   case WM_CREATE:
-    ME3_RndInit(hWnd);
+    ME3_AnimInit(hWnd);
     SetTimer(hWnd, 30, 10, NULL);
     return 0;
 
   case WM_SIZE:/* идет сразу после create */
-    ME3_RndResize(LOWORD(lParam), HIWORD(lParam));
+    ME3_AnimResize(LOWORD(lParam), HIWORD(lParam));
     SendMessage(hWnd, WM_TIMER, 30, 0);
     return 0;
   case WM_TIMER:
-    //ME3_RndCamSet(VecSet(10, 10, 5), VecSet(0, 0, 0), VecSet(0, 1, 0));
+    ME3_AnimRender();
+
     ME3_RndStart();
     ME3_RndEnd();
     hDC = GetDC(hWnd);

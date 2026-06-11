@@ -92,6 +92,8 @@ BOOL ME3_RndPrimCreateSphere( me3PRIM *Pr, DBL R, INT W, INT H )
   return TRUE;
 } /* End of 'ME3_RndPrimCreateSphere' function */
 
+
+
 /* Primitive free function.
  * ARGUMENTS:
  *   - primitive to be load:

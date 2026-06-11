@@ -29,16 +29,13 @@ VOID ME3_RndCamSet( VEC Loc, VEC At, VEC Up );
 VOID ME3_RndEnd( VOID );
 VOID ME3_RndCopyFrame( HDC hDC );
 
-
-
-
 /*** Primitives ***/
-typedef struct tagme3VERTEX /*вершина*/
+typedef struct tagme3VERTEX 
 {
   VEC P;
 } me3VERTEX;
 
-typedef struct tagme3PRIM /*примитив*/
+typedef struct tagme3PRIM 
 {
   me3VERTEX *V; 
   INT NumOfV;
