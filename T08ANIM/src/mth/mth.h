@@ -399,4 +399,9 @@ __inline MATR MatrFrustum( DBL Left, DBL Right, DBL Bottom, DBL Top, DBL Near, D
   return m;
 } /* End of 'MatrFrustum' function */
 
+__inline DBL Rnd1( VOID )
+{
+  return 2.0 * rand() / RAND_MAX - 1;
+}
+
 #endif /*__mth_h_*/

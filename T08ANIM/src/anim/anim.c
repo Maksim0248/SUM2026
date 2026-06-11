@@ -6,14 +6,31 @@
 
 
 #include "anim.h"
-VOID ME3_AnimInit(HWND hWnd)
+#include <string.h>
+
+me3ANIM ME3_Anim; 
+
+VOID ME3_AnimInit( HWND hWnd )
 {
-  memset(&ME3_Anim, 0, sizeof(vg4ANIM);
+  memset(&ME3_Anim, 0, sizeof(me3ANIM));
+
   ME3_Anim.hWnd = hWnd;
   ME3_RndInit(hWnd);
   ME3_Anim.hDC = ME3_hRndDCFrame;
 }
-/*ME3_AnimClose*/
+
+VOID ME3_AnimClose( VOID )
+{
+  int i;
+
+  for (i = 0; i < ME3_Anim.NumOfUnits; i++)
+  {
+    ME3_Anim.Units[i]->Close(ME3_Anim.Units[i], &ME3_Anim);
+    free(ME3_Anim.Units[i]);
+    ME3_Anim.Units[i] = NULL;
+  }
+  ME3_RndClose();
+}
 
 VOID ME3_AnimResize( INT W, INT H )
 {
@@ -27,11 +44,11 @@ VOID ME3_AnimRender( VOID )
 {
   INT i;
 
-  for (i = 0; i < Anim.NumOfUnits; i++)
+  for (i = 0; i < ME3_Anim.NumOfUnits; i++)
     ME3_Anim.Units[i]->Response(ME3_Anim.Units[i], &ME3_Anim);
 
   RndStart();
-  for (i = 0; i < Anim.NumOfUnits; i++)
+  for (i = 0; i < ME3_Anim.NumOfUnits; i++)
     ME3_Anim.Units[i]->Render(ME3_Anim.Units[i], &ME3_Anim);
   RndEnd();
 }

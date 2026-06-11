@@ -106,4 +106,4 @@ VOID ME3_RndCamSet( VEC Loc, VEC At, VEC Up )
   ME3_RndMatrView = MatrView(Loc, At, Up);
   ME3_RndMatrVP = MatrMulMatr(ME3_RndMatrView, ME3_RndMatrProj);
 }
-/**.
+/*End*/

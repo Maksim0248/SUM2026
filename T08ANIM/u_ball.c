@@ -26,19 +26,26 @@ static VOID ME3_UnitResponse(me3UNIT_BALL *Uni, me3ANIM *Ani)
 
 static VOID ME3_UnitRender(me3UNIT_BALL *Uni, me3ANIM *Ani, me3PRIM *sph)
 {
-  ME3_RndPrimDraw(&Uni->Bl, MatrIdentity());
+  ME3_RndPrimDraw(&Uni->Bl, MatrTranslate(Uni->Pos));
 }
+
+static VOID ME3_UnitClose(me3UNIT_BALL *Uni, me3ANIM *Ani)
+{
+  ME3_RndPrimFree(&Uni->Bl);
+}
+
 
 me3UNIT * ME3_UnitCreateBall( VOID )
 {
   me3UNIT_BALL *Uni;
  
-  if ((Uni = (me3UNIT_BALL *)AnimUnitCreate(sizeof(UNIT_COW))) == NULL)
+  if ((Uni = (me3UNIT_BALL *)AnimUnitCreate(sizeof(me3UNIT_BALL))) == NULL)/*create empty struct*/
     return NULL;
 
   Uni->Init = (VOID *)ME3_UnitInit;
   Uni->Close = (VOID *)ME3_UnitClose;
   Uni->Render = (VOID *)ME3_UnitRender;
+  Uni->Response = (VOID *)ME3_UnitResponse;
 
-  return (me3UNIT_BALL *)Uni;
+  return (me3UNIT *)Uni;
 }

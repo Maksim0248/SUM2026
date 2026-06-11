@@ -9,22 +9,25 @@
 
 #include "rnd/rnd.h"
 
-#define MAX_UNITS 3000
-UNIT * Units[me3_MAX_UNITS];
-INT NumOfUnits;
+#define me3_MAX_UNITS 1000
 
-#define UNIT_BASE_FIELDS \
-  VOID (*Init)( UNIT *Uni, ANIM *Ani ); \
-  VOID (*Close)( UNIT *Uni, ANIM *Ani ); \
-  VOID (*Response)( UNIT *Uni, ANIM *Ani ); \
-  VOID (*Render)( UNIT *Uni, ANIM *Ani ) 
- 
+#define me3UNIT_BASE_FIELDS \
+  VOID (*Init)( me3UNIT *Uni, me3ANIM *Ani ); \
+  VOID (*Close)( me3UNIT *Uni, me3ANIM *Ani ); \
+  VOID (*Response)( me3UNIT *Uni, me3ANIM *Ani ); \
+  VOID (*Render)( me3UNIT *Uni, me3ANIM *Ani ) 
+
+typedef struct tagme3ANIM me3ANIM;
+typedef struct tagme3UNIT me3UNIT; 
 struct tagme3UNIT
 {
-  UNIT_BASE_FIELDS;
+  me3UNIT_BASE_FIELDS;
 };
 
-typedef struct tagme3UNIT me3UNIT;
+#define MAX_UNITS 3000
+me3UNIT * Units[me3_MAX_UNITS];
+INT NumOfUnits;
+
 typedef struct tagme3ANIM
 {
   HWND hWnd;                      
@@ -40,13 +43,14 @@ typedef struct tagme3ANIM
   BOOL
     IsPause;                     */
 };
-typedef struct tagme3ANIM me3ANIM;
 
-extern tagme3ANIM ME3_Anim; /* контекст анимации*/
+extern me3ANIM ME3_Anim; 
 
-VOID ME3_AnimInit(hWnd);
+VOID ME3_AnimInit( hWnd );
 VOID ME3_AnimResize( INT W, INT H );
 VOID ME3_AnimRender( VOID );
-VOID ME3_AnimUnitAdd( UNIT *Uni );
+VOID ME3_AnimUnitAdd( me3UNIT *Uni );
+VOID ME3_AnimClose( VOID );
+me3UNIT * ME3_AnimUnitCreate( INT Size );
 
 #endif /* __anim_h_ */

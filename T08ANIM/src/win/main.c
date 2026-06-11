@@ -112,7 +112,7 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
   static int Xc, Yc, lenm = 200, lenh = 100, x, y;
 
   /*Descriptors*/
-  static HDC hDC;/*контекст окна*/
+  static HDC hDC;
   
   switch (Msg)
   {
@@ -121,17 +121,15 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
     SetTimer(hWnd, 30, 10, NULL);
     return 0;
 
-  case WM_SIZE:/* идет сразу после create */
+  case WM_SIZE: /* after create */
     ME3_AnimResize(LOWORD(lParam), HIWORD(lParam));
     SendMessage(hWnd, WM_TIMER, 30, 0);
     return 0;
   case WM_TIMER:
     ME3_AnimRender();
 
-    ME3_RndStart();
-    ME3_RndEnd();
     hDC = GetDC(hWnd);
-    ME3_RndCopyFrame(hDC);
+    ME3_AnimCopyFrame(hDC);
     ReleaseDC(hWnd, hDC);
     return 0;
   case WM_GETMINMAXINFO:
@@ -144,7 +142,7 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
     return 0;
   case WM_PAINT:
     hDC = BeginPaint(hWnd, &ps);
-    ME3_RndCopyFrame(hDC);
+    ME3_AnimCopyFrame(hDC);
     EndPaint(hWnd, &ps);
     return 0;
   case WM_ERASEBKGND:
@@ -157,13 +155,8 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
   case WM_MOUSEMOVE:
     return 0;
 
-  case WM_CLOSE:
-    if (MessageBox(hWnd, "Are you sure close window?", "Exit", MB_YESNO | MB_ICONQUESTION) == IDNO)
-      return 0;
-    break;
-
   case WM_DESTROY:
-    ME3_RndClose();
+    ME3_AnimClose();
     PostMessage(NULL, WM_QUIT, 30, 0);
     return 0;
   }

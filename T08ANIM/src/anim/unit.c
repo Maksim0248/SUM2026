@@ -4,7 +4,7 @@
  * DATE: 08.06.2026
  */
 
-#include "def.h"
+#include "anim.h"
 
 /* me3UNIT initialization function.
  * ARGUMENTS:
@@ -38,7 +38,7 @@ static VOID ME3_UnitClose( me3UNIT *Uni, me3ANIM *Ani )
  *       me3ANIM *Ani;
  * RETURNS: None.
  */
-static VOID ME3_UnitResponse( me3UNIT *Uni, me3ANIM *Ani );
+static VOID ME3_UnitResponse( me3UNIT *Uni, me3ANIM *Ani )
 {
 } /* End of 'ME3_UnitResponse' function */
  
