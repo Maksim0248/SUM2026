@@ -47,10 +47,10 @@ VOID ME3_AnimRender( VOID )
   for (i = 0; i < ME3_Anim.NumOfUnits; i++)
     ME3_Anim.Units[i]->Response(ME3_Anim.Units[i], &ME3_Anim);
 
-  RndStart();
+  ME3_RndStart();
   for (i = 0; i < ME3_Anim.NumOfUnits; i++)
     ME3_Anim.Units[i]->Render(ME3_Anim.Units[i], &ME3_Anim);
-  RndEnd();
+  ME3_RndEnd();
 }
 
 VOID ME3_AnimCopyFrame( HDC hDC )

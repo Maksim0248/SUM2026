@@ -58,6 +58,7 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
   WNDCLASS wc;
   HWND hWnd;
   MSG msg;
+  INT i;
 
   SetDbgMemHooks();
 
@@ -84,7 +85,10 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
 
   UpdateWindow(hWnd);
 
-  ME3_AnimUnitAdd(ME3_UnitCreateBall());
+  for (i = 0; i < 20; i++)
+  {
+    ME3_AnimUnitAdd(ME3_UnitCreateBall());
+  }
 
   while (TRUE)
   {

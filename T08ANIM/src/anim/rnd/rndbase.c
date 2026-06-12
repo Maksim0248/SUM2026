@@ -14,7 +14,7 @@ VOID ME3_RndInit( HWND hWnd )
   ME3_hRndDCFrame = CreateCompatibleDC(GetDC(hWnd));
 
   ME3_hRndBmFrame = NULL;
-  ME3_RndCamSet(VecSet(25, 20, 30), VecSet(0, 0, 0), VecSet(0, 1, 0));
+  ME3_RndCamSet(VecSet(10, 20, 30), VecSet(0, 0, 0), VecSet(0, 1, 0));
 
 }
 

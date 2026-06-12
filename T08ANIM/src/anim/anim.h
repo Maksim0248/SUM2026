@@ -34,14 +34,14 @@ typedef struct tagme3ANIM
   HDC hDC;                        
   INT W, H;                       
  
-  me3UNIT * Units[me3_MAX_UNITS]; 
-  INT NumOfUnits;                 
-  /*DBL
-    GlobalTime, GlobalDeltaTime, 
-    Time, DeltaTime,             
-    FPS;                         
+  me3UNIT * Units[me3_MAX_UNITS];
+  INT NumOfUnits;
+  DBL
+    GlobalTime, GlobalDeltaTime,
+    Time, DeltaTime,
+    FPS;
   BOOL
-    IsPause;                     */
+    IsPause;
 };
 
 extern me3ANIM ME3_Anim; 
@@ -52,5 +52,6 @@ VOID ME3_AnimRender( VOID );
 VOID ME3_AnimUnitAdd( me3UNIT *Uni );
 VOID ME3_AnimClose( VOID );
 me3UNIT * ME3_AnimUnitCreate( INT Size );
+VOID ME3_AnimCopyFrame( HDC hDC );
 
 #endif /* __anim_h_ */

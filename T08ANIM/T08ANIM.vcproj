@@ -242,11 +242,11 @@
 				Name="units"
 				>
 				<File
-					RelativePath=".\u_ball.c"
+					RelativePath=".\src\units\u_ball.c"
 					>
 				</File>
 				<File
-					RelativePath=".\units.h"
+					RelativePath=".\src\units\units.h"
 					>
 				</File>
 			</Filter>

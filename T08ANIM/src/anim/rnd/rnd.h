@@ -9,6 +9,7 @@
 
 #include "def.h"
 
+
 extern HWND ME3_hRndWnd;
 extern HDC ME3_hRndDCFrame;
 
