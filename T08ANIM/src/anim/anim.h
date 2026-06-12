@@ -42,6 +42,8 @@ typedef struct tagme3ANIM
     FPS;
   BOOL
     IsPause;
+  BYTE Keys[256]; /*state of buttons on this frame*/
+  BYTE KeysClick[256]; /* 1 click state*/
 };
 
 extern me3ANIM ME3_Anim; 
@@ -53,5 +55,9 @@ VOID ME3_AnimUnitAdd( me3UNIT *Uni );
 VOID ME3_AnimClose( VOID );
 me3UNIT * ME3_AnimUnitCreate( INT Size );
 VOID ME3_AnimCopyFrame( HDC hDC );
+VOID TimerResponse( VOID );
+VOID TimerInit( VOID );
+VOID ME3_AnimInputInit( VOID );
+VOID ME3_AnimInputResponse( VOID );
 
 #endif /* __anim_h_ */

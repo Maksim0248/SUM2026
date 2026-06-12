@@ -61,9 +61,10 @@ BOOL ME3_RndPrimCreateSphere( me3PRIM *Pr, DBL R, INT W, INT H )
   for (k = 0, i = 0, theta = 0; i < H; i++, theta += PI / (H - 1))
     for (j = 0, phi = 0; j < W; j++, phi += 2 * PI / (W - 1))
     {
-      Pr->V[k].C.X = (FLT)rand() / RAND_MAX;
-      Pr->V[k].C.Y = (FLT)rand() / RAND_MAX;
-      Pr->V[k].C.Z = (FLT)rand() / RAND_MAX;
+      Pr->V[k].C.X = (FLT)rand() / RAND_MAX;/*R*/
+      Pr->V[k].C.Y = (FLT)rand() / RAND_MAX;/*G*/
+      Pr->V[k].C.Z = (FLT)rand() / RAND_MAX;/*B*/
+
       Pr->V[k++].P = VecSet(R * sin(theta) * sin(phi),
                             R * cos(theta),
                             R * sin(theta) * cos(phi));

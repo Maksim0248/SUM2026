@@ -51,6 +51,17 @@ VOID ME3_RndInit( HWND hWnd )
   ME3_RndCamSet(VecSet(5, 5, 5), VecSet(0, 0, 0), VecSet(0, 1, 0));
 }
 
+VOID ME3_RndResize( INT W, INT H )
+{
+  glViewport(0, 0, W, H); /* area where GL draw */
+
+  ME3_RndFrameW = W;
+  ME3_RndFrameH = H;
+ 
+  ME3_RndProjSet();
+  ME3_RndCamSet(VecSet(10, 20, 30), VecSet(0, 0, 0), VecSet(0, 1, 0));
+}
+
 VOID ME3_RndStart( VOID )
 {
   VEC4 ClearColor = {0.2, 0.7, 0.1, 1};
@@ -79,16 +90,7 @@ VOID ME3_RndCopyFrame( VOID )
   SwapBuffers(ME3_hRndDC);
 }
 
-VOID ME3_RndResize( INT W, INT H )
-{
-  glViewport(0, 0, W, H); /* area where we draw */
 
-  ME3_RndFrameW = W;
-  ME3_RndFrameH = H;
- 
-  ME3_RndProjSet();
-  ME3_RndCamSet(VecSet(10, 20, 30), VecSet(0, 0, 0), VecSet(0, 1, 0));
-}
 
 VOID ME3_RndProjSet( VOID )
 {
