@@ -18,6 +18,7 @@ VOID ME3_AnimInit( HWND hWnd )
   ME3_RndInit(hWnd);
   ME3_Anim.hDC = ME3_hRndDC;
   TimerInit();
+  ME3_AnimInputInit();
 }
 
 VOID ME3_AnimClose( VOID )
@@ -46,6 +47,7 @@ VOID ME3_AnimRender( VOID )
   INT i;
 
   TimerResponse();
+  ME3_AnimInputResponse();
   for (i = 0; i < ME3_Anim.NumOfUnits; i++)
     ME3_Anim.Units[i]->Response(ME3_Anim.Units[i], &ME3_Anim);
 

@@ -10,6 +10,7 @@
 #include "anim/anim.h"
 
 me3UNIT * ME3_UnitCreateBall( VOID );
+me3UNIT * ME3_UnitCreateCam( VOID );
 
 #endif /* __units_h_ */
 

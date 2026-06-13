@@ -5,7 +5,6 @@
  */
 
 #include <time.h>
-
 #include "units.h"
 
 typedef struct tagUNIT_BALL me3UNIT_BALL;
@@ -19,13 +18,27 @@ struct tagUNIT_BALL
 static VOID ME3_UnitInit(me3UNIT_BALL *Uni, me3ANIM *Ani)
 {
   ME3_RndPrimCreateSphere(&Uni->Bl, 1, 10, 20);
-  Uni->Pos = VecSet(0, 0.2, 0.3);
+  //Uni->Pos = VecSet(0, 0.2, 0.3);
   Uni->Pos = VecSet(0, 0, 0);
 }
 
 static VOID ME3_UnitResponse(me3UNIT_BALL *Uni, me3ANIM *Ani)
 {
-  Uni->Pos.Y = fabs(sin(3 * clock() / 1000.0));
+  DBL SpeedX, SpeedY;
+  /*Uni->Pos.Y = fabs(sin(3 * clock() / 1000.0));*/
+  SpeedX = SpeedY = 0;
+
+  if ((Ani->Keys['D'] == 1) || (Ani->Keys[VK_RIGHT] == 1))
+    SpeedX = 2;
+  if ((Ani->Keys['A'] == 1) || (Ani->Keys[VK_LEFT] == 1))
+    SpeedX = -2;
+  if ((Ani->Keys['S'] == 1) || (Ani->Keys[VK_DOWN] == 1))
+    SpeedY = -2;
+  if ((Ani->Keys['W'] == 1) || (Ani->Keys[VK_UP] == 1))
+    SpeedY = 2;
+  Uni->Pos.X += SpeedX * Ani->DeltaTime;
+  Uni->Pos.Y += SpeedY * Ani->DeltaTime;
+
 }
 
 static VOID ME3_UnitRender(me3UNIT_BALL *Uni, me3ANIM *Ani, me3PRIM *sph)

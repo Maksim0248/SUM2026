@@ -85,6 +85,7 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
   UpdateWindow(hWnd);
 
   ME3_AnimUnitAdd(ME3_UnitCreateBall());
+  ME3_AnimUnitAdd(ME3_UnitCreateCam());
 
   while (TRUE)
   {

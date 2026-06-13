@@ -59,7 +59,7 @@ VOID ME3_RndResize( INT W, INT H )
   ME3_RndFrameH = H;
  
   ME3_RndProjSet();
-  ME3_RndCamSet(VecSet(10, 20, 30), VecSet(0, 0, 0), VecSet(0, 1, 0));
+  //ME3_RndCamSet(VecSet(15, 0, 0), VecSet(0, 0, 0), VecSet(0, 1, 0));
 }
 
 VOID ME3_RndStart( VOID )
