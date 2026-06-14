@@ -229,6 +229,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\src\anim\rnd\rnddebug.c"
+						>
+					</File>
+					<File
 						RelativePath=".\src\anim\rnd\rndprim.c"
 						>
 					</File>
@@ -237,6 +241,34 @@
 						>
 						<File
 							RelativePath=".\src\anim\rnd\opengl\glew.c"
+							>
+						</File>
+						<File
+							RelativePath=".\src\anim\rnd\opengl\glew.h"
+							>
+						</File>
+						<File
+							RelativePath=".\src\anim\rnd\opengl\wglew.h"
+							>
+						</File>
+						<File
+							RelativePath=".\src\anim\rnd\opengl\wglext.h"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="Resources"
+						>
+						<File
+							RelativePath=".\src\anim\rnd\res\rndres.c"
+							>
+						</File>
+						<File
+							RelativePath=".\src\anim\rnd\res\rndres.h"
+							>
+						</File>
+						<File
+							RelativePath=".\src\anim\rnd\res\rndshd.c"
 							>
 						</File>
 					</Filter>
@@ -259,6 +291,10 @@
 				</File>
 				<File
 					RelativePath=".\src\units\u_ball.c"
+					>
+				</File>
+				<File
+					RelativePath=".\src\units\u_cow.c"
 					>
 				</File>
 				<File

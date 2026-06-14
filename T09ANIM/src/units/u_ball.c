@@ -24,19 +24,18 @@ static VOID ME3_UnitInit(me3UNIT_BALL *Uni, me3ANIM *Ani)
 
 static VOID ME3_UnitResponse(me3UNIT_BALL *Uni, me3ANIM *Ani)
 {
-  DBL SpeedX, SpeedY;
+  DBL SpeedX, SpeedY, SpeedZ;
   /*Uni->Pos.Y = fabs(sin(3 * clock() / 1000.0));*/
-  SpeedX = SpeedY = 0;
-
-  if ((Ani->Keys['D'] == 1) || (Ani->Keys[VK_RIGHT] == 1))
-    SpeedX = 2;
-  if ((Ani->Keys['A'] == 1) || (Ani->Keys[VK_LEFT] == 1))
-    SpeedX = -2;
-  if ((Ani->Keys['S'] == 1) || (Ani->Keys[VK_DOWN] == 1))
-    SpeedY = -2;
-  if ((Ani->Keys['W'] == 1) || (Ani->Keys[VK_UP] == 1))
+  SpeedX = SpeedY = SpeedZ = 0;
+  if (Ani->Keys['W'] == 1)
     SpeedY = 2;
-  Uni->Pos.X += SpeedX * Ani->DeltaTime;
+  if (Ani->Keys['S'] == 1)
+    SpeedY = -2;
+  if (Ani->Keys['A'] == 1)
+    SpeedZ = -2;
+  if (Ani->Keys['D'] == 1)
+    SpeedZ = 2;
+  Uni->Pos.Z += SpeedZ * Ani->DeltaTime;
   Uni->Pos.Y += SpeedY * Ani->DeltaTime;
 
 }

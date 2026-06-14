@@ -6,6 +6,8 @@
 
 #include "units.h"
 
+FLT a = 0;
+
 typedef struct tagUNIT_CAM me3UNIT_CAM;
 struct tagUNIT_CAM
 {
@@ -15,25 +17,29 @@ struct tagUNIT_CAM
 
 static VOID ME3_UnitInit(me3UNIT_CAM *Uni, me3ANIM *Ani)
 {
-  Uni->Pos = VecSet(5, 0, 0);
+  Uni->Pos = VecSet(-50, 5, 0);
 }
 
 static VOID ME3_UnitResponse(me3UNIT_CAM *Uni, me3ANIM *Ani)
 {
-  DBL SpeedX, SpeedY;
-  SpeedX = SpeedY = 0;
+  DBL SpeedX;
+  SpeedX = 0;
 
-  if (Ani->Keys[VK_RIGHT] == 1)
-    SpeedX = 2;
-  if (Ani->Keys[VK_LEFT] == 1)
-    SpeedX = -2;
   if (Ani->Keys[VK_DOWN] == 1)
-    SpeedY = -2;
+    SpeedX = -15;
+  if ((Ani->Keys[VK_DOWN] == 1) && (Ani->Keys[VK_SHIFT] == 1))
+    SpeedX = -50;
   if (Ani->Keys[VK_UP] == 1)
-    SpeedY = 2;
+    SpeedX = 15;
+  if ((Ani->Keys[VK_UP] == 1) && (Ani->Keys[VK_SHIFT] == 1))
+    SpeedX = 50;
+  if (Ani->Keys[VK_RIGHT] == 1)
+    a += 0.01;
+  if (Ani->Keys[VK_LEFT] == 1)
+    a += -0.01;
+
   Uni->Pos.X += SpeedX * Ani->DeltaTime;
-  Uni->Pos.Y += SpeedY * Ani->DeltaTime;
-  ME3_RndCamSet(Uni->Pos, VecSet(0, 0, 0), VecSet(0, 1, 0));
+  ME3_RndCamSet(VecAddVec(VecSet(0, 0, 0), Uni->Pos), VecAddVec(VecSet(cos(a), 0, sin(a)), Uni->Pos), VecSet(0, 1, 0));
 }
 
 static VOID ME3_UnitRender(me3UNIT_CAM *Uni, me3ANIM *Ani)

@@ -7,7 +7,7 @@
 #define WND_CLASS_NAME "cgsg"
 
 #include "units/units.h"
-
+#include <stdio.h>
 LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );
 
 VOID FlipFullScreen( HWND hWnd )
@@ -58,8 +58,33 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
   WNDCLASS wc;
   HWND hWnd;
   MSG msg;
-
+  CONSOLE_FONT_INFOEX cfi = {0};
+  HWND hConWnd;
   SetDbgMemHooks();
+ 
+  /* Create console */
+  AllocConsole();
+ 
+  cfi.cbSize = sizeof(CONSOLE_FONT_INFOEX);
+  GetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);
+  cfi.dwFontSize.Y = 18;
+  cfi.FontWeight = FW_BOLD;
+  SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);
+ 
+  freopen("CONOUT$", "w", stdout);
+  system("@chcp 1251 > nul");
+  printf("\x1b[38;2;%d;%d;%dm \x1b[48;2;%d;%d;%dm", 255, 255, 0, 0, 102, 102);
+                  /*RGB символов*/      /*RGB фона*/
+  printf("Группа компьютерной графики ФМЛ № 30\n");
+  printf("\x1b[38;2;%d;%d;%dm\x1b[48;2;%d;%d;%dm", 0, 255, 0, 0, 0, 0);
+  printf("Computer Graphics Support Group\n");
+  printf("\x1b[38;2;%d;%d;%dm\x1b[48;2;%d;%d;%dm", 0, 0, 255, 0, 0, 0);
+  fflush(stdout);
+ 
+  hConWnd = GetConsoleWindow();
+  /*MoveWindow(hConWnd, 0, 0, 1920, 1080, FALSE);
+  SetWindowPos(hConWnd, HWND_TOP, 0, 0, 1920, 1000, 0);*/
+
 
   wc.style = CS_VREDRAW | CS_HREDRAW;
   wc.cbClsExtra = 0;
@@ -86,6 +111,7 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
 
   ME3_AnimUnitAdd(ME3_UnitCreateBall());
   ME3_AnimUnitAdd(ME3_UnitCreateCam());
+  ME3_AnimUnitAdd(ME3_UnitCreateCow());
 
   while (TRUE)
   {

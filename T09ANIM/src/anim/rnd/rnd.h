@@ -8,9 +8,10 @@
 #define __rnd_h_
 
 #define GLEW_STATIC
-#include <glew.h>
+#include "OpenGL/glew.h"
 
 #include "def.h"
+#include "res/rndres.h"
 
 extern HWND ME3_hRndWnd;
 extern HDC ME3_hRndDC;
@@ -32,28 +33,48 @@ VOID ME3_RndEnd( VOID );
 VOID ME3_RndCopyFrame( VOID );
 
 /*** Primitives ***/
-typedef struct tagme3VERTEX 
-{
+typedef struct tagme34VERTEX
+ {
   VEC P;
+  VEC2 T;
+  VEC N;
   VEC4 C;
 } me3VERTEX;
 
-typedef struct tagme3PRIM 
+typedef enum tagme3PRIM_TYPE
 {
-  me3VERTEX *V; 
-  INT NumOfV;
+  ME3_RND_PRIM_POINTS,   /* Array of points  – GL_POINTS */
+  ME3_RND_PRIM_LINES,    /* Line segments (by 2 points) – GL_LINES */
+  ME3_RND_PRIM_TRIMESH,  /* Triangle mesh - array of triangles – GL_TRIANGLES */
+} me3PRIM_TYPE;
+
+
+
+/* Primitive representation type */
+typedef struct tagme3PRIM
+{
+  me3PRIM_TYPE Type; /* Primitive type */
  
-  INT *I;
-  INT NumOfI;
+  INT
+    VA,              /* Vertex array Id */
+    VBuf,            /* Vertex buffer Id */
+    IBuf;            /* Index buffer Id (if 0 - use only vertex buffer) */
  
-  MATR Trans;
+  INT NumOfElements; /* Number of indices/vecrtices */
+ 
+  VEC MinBB, MaxBB;  /* Bound box */
+ 
+  MATR Trans;   /* Additional transformation matrix */
 } me3PRIM;
 
 VOID ME3_RndPrimFree( me3PRIM *Pr );
-BOOL ME3_RndPrimCreate( me3PRIM *Pr, INT NoofV, INT NoofI );
+VOID ME3_RndPrimCreate( me3PRIM *Pr, me3PRIM_TYPE Type, me3VERTEX *V, INT NoofV, INT *Ind, INT NoofI );
 VOID ME3_RndPrimDraw( me3PRIM *Pr, MATR World );
 BOOL ME3_RndPrimCreateSphere( me3PRIM *Pr, DBL R, INT W, INT H );
 BOOL ME3_RndPrimLoad( me3PRIM *Pr, CHAR *FileName );
+VOID APIENTRY glDebugOutput( UINT Source, UINT Type, UINT Id, UINT Severity,
+                             INT Length, const CHAR *Message,
+                             const VOID *UserParam );
 
 
 #endif /* __rnd_h_ */

@@ -128,6 +128,20 @@ __inline VEC VecNormalize( VEC V )   /*V/|V|*/
     return V;
   return VecDivNum(V, sqrt(len));
 }
+__inline VEC VecMinVec( VEC V1, VEC V2 )
+{
+  return VecSet(V1.X < V2.X ? V1.X : V2.X,
+                V1.Y < V2.Y ? V1.Y : V2.Y,
+                V1.Z < V2.Z ? V1.Z : V2.Z);
+} /* End of 'VecMinVec' function */
+
+__inline VEC VecMaxVec( VEC V1, VEC V2 )
+{
+  return VecSet(V1.X > V2.X ? V1.X : V2.X,
+                V1.Y > V2.Y ? V1.Y : V2.Y,
+                V1.Z > V2.Z ? V1.Z : V2.Z);
+} /* End of 'VecMaxVec' function */
+
 
 __inline VEC PointTransform( VEC V, MATR M )   /*(V, 1) * M4x3*/
 {

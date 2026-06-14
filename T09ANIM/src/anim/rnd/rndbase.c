@@ -6,8 +6,8 @@
 
 #include "rnd.h"
 #include <string.h>
-#include <wglew.h>
-#include <gl/wglext.h>
+#include "OpenGl/wglew.h"
+#include "OpenGl/wglext.h"
 
 #pragma comment(lib, "opengl32")
 
@@ -39,6 +39,18 @@ VOID ME3_RndInit( HWND hWnd )
   if (glewInit() != GLEW_OK)
     exit(0);
 
+  #ifndef NDEBUG
+    OutputDebugString(glGetString(GL_VERSION));
+    OutputDebugString("\n");
+    OutputDebugString(glGetString(GL_VENDOR));
+    OutputDebugString("\n");
+    OutputDebugString(glGetString(GL_RENDERER));
+    OutputDebugString("\n");
+    glEnable(GL_DEBUG_OUTPUT);
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+    glDebugMessageCallback(glDebugOutput, NULL);/*func from rnddebug.c*/
+#endif /* NDEBUG */
+
   /* Render parameters setup */
   glEnable(GL_DEPTH_TEST);
  
@@ -49,6 +61,8 @@ VOID ME3_RndInit( HWND hWnd )
   ME3_RndFrameH = 47;
   
   ME3_RndCamSet(VecSet(5, 5, 5), VecSet(0, 0, 0), VecSet(0, 1, 0));
+
+  ME3_RndResInit();
 }
 
 VOID ME3_RndResize( INT W, INT H )
@@ -66,7 +80,8 @@ VOID ME3_RndStart( VOID )
 {
   VEC4 ClearColor = {0.2, 0.7, 0.1, 1};
   FLT DepthClearValue = 1;
- 
+  
+  ME3_RndShdUpdate();
   /* Clear frame */
   glClearBufferfv(GL_COLOR, 0, &ClearColor.X);
   glClearBufferfv(GL_DEPTH, 0, &DepthClearValue);
@@ -74,6 +89,8 @@ VOID ME3_RndStart( VOID )
 
 VOID ME3_RndClose( VOID )
 {
+  ME3_RndResClose();
+
   wglMakeCurrent(NULL, NULL);
   wglDeleteContext(ME3_hRndGLRC);
   KillTimer(ME3_hRndWnd, 30);
