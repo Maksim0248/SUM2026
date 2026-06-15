@@ -17,6 +17,29 @@ VOID ME3_RndPrimFree( me3PRIM *Pr )
   memset(Pr, 0, sizeof(me3PRIM));
 }
 
+static VOID ME3_RndPrimTriMeshAutoNormals( me3VERTEX *V, INT NumOfV, INT *Ind, INT NumOfI )
+{
+  INT i;
+
+  for (i = 0; i < NumOfV; i++)
+    V[i].N = VecSet(0, 0, 0);
+
+  for (i = 0; i < NumOfI; i += 3)
+  {
+    VEC
+      p0 = V[Ind[i]].P,
+      p1 = V[Ind[i + 1]].P,
+      p2 = V[Ind[i + 2]].P,
+      N = VecNormalize(VecCrossVec(VecSubVec(p1, p0), VecSubVec(p2, p0)));
+
+    V[Ind[i]].N = VecAddVec(V[Ind[i]].N, N);
+    V[Ind[i + 1]].N = VecAddVec(V[Ind[i + 1]].N, N);
+    V[Ind[i + 2]].N = VecAddVec(V[Ind[i + 2]].N, N);
+  }
+  for (i = 0; i < NumOfV; i++)
+    V[i].N = VecNormalize(V[i].N);
+}
+
 /* Create primitive function.
  * ARGUMENTS:
  *   - pointer to primitive to create:
@@ -129,6 +152,7 @@ VOID ME3_RndPrimDraw( me3PRIM *Pr, MATR World )
 } /* End of 'me3_RndPrimDraw' function */
 
 
+
 BOOL ME3_RndPrimCreateSphere( me3PRIM *Pr, DBL R, INT W, INT H )
 {
   INT i, j, k;
@@ -150,9 +174,9 @@ BOOL ME3_RndPrimCreateSphere( me3PRIM *Pr, DBL R, INT W, INT H )
   for (k = 0, i = 0, theta = 0; i < H; i++, theta += PI / (H - 1))
     for (j = 0, phi = 0; j < W; j++, phi += 2 * PI / (W - 1))
     {
-      V[k].C.X = (FLT)rand() / RAND_MAX;/*R*/
-      V[k].C.Y = (FLT)rand() / RAND_MAX;/*G*/
-      V[k].C.Z = (FLT)rand() / RAND_MAX;/*B*/
+      V[k].C.X = (FLT)rand() / RAND_MAX;
+      V[k].C.Y = (FLT)rand() / RAND_MAX;
+      V[k].C.Z = (FLT)rand() / RAND_MAX;
 
       V[k++].P = VecSet(R * sin(theta) * sin(phi),
                             R * cos(theta),
@@ -172,16 +196,12 @@ BOOL ME3_RndPrimCreateSphere( me3PRIM *Pr, DBL R, INT W, INT H )
       Ind[k++] = i * W + j + 1;
       Ind[k++] = (i + 1) * W + j + 1;
     }
-
+    
+  ME3_RndPrimTriMeshAutoNormals(V, W * H, Ind, (H - 1) * (W - 1) * 2 * 3);
   ME3_RndPrimCreate(Pr, ME3_RND_PRIM_TRIMESH, V, W * H, Ind, (H - 1) * (W - 1) * 2 * 3);
   free(V);
   return TRUE;
 } /* End of 'ME3_RndPrimCreateSphere' function */
-
-
-
-
-
 
 BOOL ME3_RndPrimLoad( me3PRIM *Pr, CHAR *FileName )
 {

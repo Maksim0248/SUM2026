@@ -3,9 +3,8 @@
 #include <time.h>
 
 
-UINT ME3_RndProgId;
-
 me3SHADER ME3_RndShaders[ME3_MAX_SHADERS];
+INT ME3_RndShadersSize = 0;
 
 /* Save log to file function.
  * ARGUMENTS:
@@ -82,8 +81,8 @@ static UINT ME3_RndShdLoad( CHAR *FileNamePrefix )
     INT Id;      /* Created shader Id */
   } shd[] =
   {
-    {"VERT", GL_VERTEX_SHADER, 0},
-    {"FRAG", GL_FRAGMENT_SHADER, 0},
+    {"vert", GL_VERTEX_SHADER, 0},
+    {"frag", GL_FRAGMENT_SHADER, 0},
   };
   INT res, i, NoofS = sizeof(shd) / sizeof(shd[0]);
   UINT prg;
@@ -201,7 +200,7 @@ static VOID ME3_RndShdFree( UINT ProgId )
 INT ME3_RndShdAdd( CHAR *ShaderFileNamePrefix )
 {
   INT i;
- 
+  /*check if shader already added*/
   for (i = 0; i < ME3_RndShadersSize; i++)
     if (strcmp(ShaderFileNamePrefix, ME3_RndShaders[i].Name) == 0)
       return i;
@@ -228,14 +227,14 @@ VOID ME3_RndShdUpdate( VOID )
     {
       ME3_RndShdFree(ME3_RndShaders[i].ProgId);
       ME3_RndShaders[i].ProgId = ME3_RndShdLoad(ME3_RndShaders[i].Name);
-      old_time = t
+      old_time = t;
     }
   }
 } /* End of 'ME3_RndShdUpdate' function */
 
 VOID ME3_RndShdInit( VOID )
 {
-  ME3_RndProgId = ME3_RndShdAdd("bin/shaders/default");
+  ME3_RndShdAdd("default");
 } /* End of 'ME3_RndShdInit' function */
  
 

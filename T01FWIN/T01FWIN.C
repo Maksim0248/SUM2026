@@ -113,14 +113,14 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
     else
       SelectObject(hDC, GetStockObject(WHITE_BRUSH));
     SelectObject(hDC, GetStockObject(DC_PEN));
-    SetDCPenColor(hDC, RGB(255, 0, 0));
+    SetDCPenColor(hDC, RGB(10, 250, 0));
  
     Ellipse(hDC, 0, 0, W, H);
  
     GetCursorPos(&pt);
     ScreenToClient(hWnd, &pt);
  
-    SetDCPenColor(hDC, RGB(0, 0, 250));
+    SetDCPenColor(hDC, RGB(50, 200, 0));
     Ellipse(hDC, pt.x - 5, pt.y - 5, pt.x + 5, pt.y + 5);
  
     GetLocalTime(&st);
