@@ -104,9 +104,10 @@ VOID ME3_RndPrimDraw( me3PRIM *Pr, MATR World )
     Pr->Type == ME3_RND_PRIM_LINES ? GL_LINES :
     Pr->Type == ME3_RND_PRIM_TRIMESH ? GL_TRIANGLES :
     GL_POINTS;
-  UINT ProgId = ME3_RndProgId;
+  UINT ProgId;
   INT loc;
  
+  ProgId = ME3_RndShaders[0].ProgId;
   glUseProgram(ProgId);
   if ((loc = glGetUniformLocation(ProgId, "MatrWVP")) != -1)
     glUniformMatrix4fv(loc, 1, FALSE, wvp.A[0]);

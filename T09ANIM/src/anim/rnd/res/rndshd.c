@@ -2,7 +2,10 @@
 #include <stdio.h>
 #include <time.h>
 
+
 UINT ME3_RndProgId;
+
+me3SHADER ME3_RndShaders[ME3_MAX_SHADERS];
 
 /* Save log to file function.
  * ARGUMENTS:
@@ -31,6 +34,7 @@ static VOID ME3_RndShdLog( CHAR *FileNamePrefix, CHAR *ShaderName, CHAR *Text )
  * RETURNS:
  *   (CHAR *) load text.
  */
+
 static CHAR * ME3_RndLoadTextFromFile( CHAR *FileName )
 {
   FILE *F;
@@ -234,6 +238,7 @@ VOID ME3_RndShdInit( VOID )
   ME3_RndProgId = ME3_RndShdAdd("bin/shaders/default");
 } /* End of 'ME3_RndShdInit' function */
  
+
 /* Shader storage deinitialize function.
  * ARGUMENTS: None.
  * RETURNS: None.
