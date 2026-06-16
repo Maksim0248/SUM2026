@@ -11,6 +11,7 @@
 
 #pragma comment(lib, "opengl32")
 
+
 VOID ME3_RndInit( HWND hWnd )
 { 
   INT i;
@@ -53,7 +54,9 @@ VOID ME3_RndInit( HWND hWnd )
 
   /* Render parameters setup */
   glEnable(GL_DEPTH_TEST);
- 
+
+  glEnable(GL_PRIMITIVE_RESTART);
+  glPrimitiveRestartIndex(-1);
   ME3_RndProjSize = 0.1;
   ME3_RndProjDist = ME3_RndProjSize;
   ME3_RndProjFarClip = 300;
@@ -129,5 +132,16 @@ VOID ME3_RndCamSet( VEC Loc, VEC At, VEC Up )
 {
   ME3_RndMatrView = MatrView(Loc, At, Up);
   ME3_RndMatrVP = MatrMulMatr(ME3_RndMatrView, ME3_RndMatrProj);
+  ME3_RndCamRight = VecSet(ME3_RndMatrView.A[0][0],
+                         ME3_RndMatrView.A[1][0],
+                         ME3_RndMatrView.A[2][0]); 
+  ME3_RndCamUp = VecSet(ME3_RndMatrView.A[0][1],
+                      ME3_RndMatrView.A[1][1],
+                      ME3_RndMatrView.A[2][1]);
+  ME3_RndCamDir = VecSet(-ME3_RndMatrView.A[0][2],
+                       -ME3_RndMatrView.A[1][2],
+                       -ME3_RndMatrView.A[2][2]);
+  ME3_RndCamLoc = Loc;
+  ME3_RndCamAt = At;
 }
 /*End*/

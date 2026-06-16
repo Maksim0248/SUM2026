@@ -5,14 +5,17 @@ layout(location = 1) in vec2 InTexCoord;
 layout(location = 2) in vec3 InNormal;
 layout(location = 3) in vec4 InColor;
  
-uniform mat4 MatrWVP;
+uniform mat4 MatrWVP, MatrWN, MatrW;
+uniform float Time;
  
 out vec4 DrawColor;
-out vec3 N;
+out vec3 DrawNormal;
+out vec3 DrawPos;
  
 void main( void )
 {
-  gl_Position = MatrWVP * vec4(InPosition, 1);
+  gl_Position =  MatrWVP * vec4(InPosition, 1);
   DrawColor = InColor;
-  N = InNormal;
+  DrawNormal = mat3(MatrWN) * InNormal;
+  DrawPos = (MatrW * vec4(InPosition, 1)).xyz;
 }

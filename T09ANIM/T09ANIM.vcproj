@@ -286,15 +286,15 @@
 				Name="units"
 				>
 				<File
-					RelativePath=".\src\units\control.c"
-					>
-				</File>
-				<File
 					RelativePath=".\src\units\u_ball.c"
 					>
 				</File>
 				<File
 					RelativePath=".\src\units\u_cow.c"
+					>
+				</File>
+				<File
+					RelativePath=".\src\units\u_ctrl.c"
 					>
 				</File>
 				<File

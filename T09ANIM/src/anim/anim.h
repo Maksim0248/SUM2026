@@ -44,10 +44,11 @@ typedef struct tagme3ANIM
     IsPause;
   BYTE Keys[256]; /*state of buttons on this frame*/
   BYTE KeysClick[256]; /* 1 click state*/
-
+  INT Mx, My, Mz, Mdx, Mdy, Mdz;
 };
 
 extern me3ANIM ME3_Anim; 
+extern INT ME3_MouseWheel;
 
 VOID ME3_AnimInit( hWnd );
 VOID ME3_AnimResize( INT W, INT H );

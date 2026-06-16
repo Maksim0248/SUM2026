@@ -123,19 +123,32 @@ VOID ME3_RndPrimCreate( me3PRIM *Pr, me3PRIM_TYPE Type, me3VERTEX *V, INT NoofV,
 VOID ME3_RndPrimDraw( me3PRIM *Pr, MATR World )
 {
   MATR wvp = MatrMulMatr(MatrMulMatr(Pr->Trans, World), ME3_RndMatrVP);
+  MATR wn = MatrTranspose(MatrInverse(MatrMulMatr(Pr->Trans, World)));
+  MATR w = MatrMulMatr(Pr->Trans, World);
+
   INT prim_type =
     Pr->Type == ME3_RND_PRIM_LINES ? GL_LINES :
     Pr->Type == ME3_RND_PRIM_TRIMESH ? GL_TRIANGLES :
     GL_POINTS;
   UINT ProgId;
   INT loc;
- 
+  
+  /*prim_type = GL_POINTS;
+  glPointSize(5);
+  glEnable(GL_POINT_SMOOTH);*/
+  glEnable(GL_CULL_FACE);
+  glCullFace(GL_BACK);
+
   ProgId = ME3_RndShaders[0].ProgId;
   glUseProgram(ProgId);
   if ((loc = glGetUniformLocation(ProgId, "MatrWVP")) != -1)
     glUniformMatrix4fv(loc, 1, FALSE, wvp.A[0]);
+  if ((loc = glGetUniformLocation(ProgId, "MatrWN")) != -1)
+    glUniformMatrix4fv(loc, 1, FALSE, wn.A[0]);
+  if ((loc = glGetUniformLocation(ProgId, "MatrW")) != -1)
+    glUniformMatrix4fv(loc, 1, FALSE, w.A[0]);
   if ((loc = glGetUniformLocation(ProgId, "Time")) != -1)
-    glUniform1f(loc, ME3_Anim.Time);
+    glUniform1f(loc, ME3_Anim.GlobalTime);
   //glLoadMatrixf(wvp.A[0]);
  
   glBindVertexArray(Pr->VA);/*activate*/
@@ -160,7 +173,6 @@ BOOL ME3_RndPrimCreateSphere( me3PRIM *Pr, DBL R, INT W, INT H )
   INT size;
   me3VERTEX *V;
   INT *Ind;
-  VEC L = VecNormalize(VecSet(1, 1, 1));
 
   memset(Pr, 0, sizeof(me3PRIM));
   size = sizeof(me3VERTEX) * W * H + sizeof(INT) * (H - 1) * (W - 1) * 2 * 3;
@@ -211,7 +223,6 @@ BOOL ME3_RndPrimLoad( me3PRIM *Pr, CHAR *FileName )
   INT size;
   me3VERTEX *V;
   INT *Ind;
-  VEC L = VecNormalize(VecSet(1, 1, 1));
 
   memset(Pr, 0, sizeof(me3PRIM));
  
@@ -296,7 +307,7 @@ BOOL ME3_RndPrimLoad( me3PRIM *Pr, CHAR *FileName )
     }
   }
   fclose(F);
-  /* добавить автонормали к каждой вершине */
+  ME3_RndPrimTriMeshAutoNormals(V, nv, Ind, nf);
   for (i = 0; i < nv; i++)
   {
     V[i].C = VecSet4(0.21 * Rnd1(), 0.11 * Rnd1(), 0.11 * Rnd1(), 1);

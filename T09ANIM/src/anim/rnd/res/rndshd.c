@@ -221,14 +221,14 @@ VOID ME3_RndShdUpdate( VOID )
   INT i, t = clock();
   static INT old_time;
   
-  if (t - old_time > 2 * CLOCKS_PER_SEC)
+  if (t - old_time > CLOCKS_PER_SEC)
   {
     for (i = 0; i < ME3_RndShadersSize; i++)
     {
       ME3_RndShdFree(ME3_RndShaders[i].ProgId);
       ME3_RndShaders[i].ProgId = ME3_RndShdLoad(ME3_RndShaders[i].Name);
-      old_time = t;
     }
+    old_time = t;
   }
 } /* End of 'ME3_RndShdUpdate' function */
 

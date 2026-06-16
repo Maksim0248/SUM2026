@@ -22,6 +22,7 @@ extern DBL ME3_RndProjSize, ME3_RndProjDist, ME3_RndProjFarClip;
 
 extern MATR ME3_RndMatrView, ME3_RndMatrProj, ME3_RndMatrVP;
 extern HGLRC ME3_hRndGLRC; /* Open GL rendering context*/
+extern VEC ME3_RndCamLoc, ME3_RndCamAt, ME3_RndCamDir, ME3_RndCamRight, ME3_RndCamUp;
 
 VOID ME3_RndInit( HWND hWnd );
 VOID ME3_RndClose( VOID );

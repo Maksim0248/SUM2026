@@ -430,6 +430,13 @@ __inline FLT Rnd1( VOID )
 {
   return 2.0 * rand() / RAND_MAX - 1;
 }
-
+__inline FLT R2D( FLT R )
+{
+  return R * 180.0 / PI;
+}
+_inline MATR MatrMulMatr3( MATR M1, MATR M2, MATR M3 )
+{
+  return MatrMulMatr(MatrMulMatr(M1, M2), M3);
+}
 
 #endif /*__mth_h_*/

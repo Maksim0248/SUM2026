@@ -9,7 +9,7 @@ VOID ME3_RndShdInit( VOID );
 VOID ME3_RndShdClose( VOID );
 VOID ME3_RndShdUpdate( VOID );
 
-#define ME3_MAX_SHADERS 300
+#define ME3_MAX_SHADERS 30
 #define ME3_STR_MAX 500
 
 typedef struct tagme3SHADER
@@ -19,5 +19,6 @@ typedef struct tagme3SHADER
 } me3SHADER;
 
 extern me3SHADER ME3_RndShaders[ME3_MAX_SHADERS];
+extern INT ME3_RndShadersSize;
 
 #endif /*__rndres_h_*/

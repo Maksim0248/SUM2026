@@ -111,7 +111,7 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
 
   ME3_AnimUnitAdd(ME3_UnitCreateBall());
   ME3_AnimUnitAdd(ME3_UnitCreateCam());
-  /*ME3_AnimUnitAdd(ME3_UnitCreateCow());*/
+  ME3_AnimUnitAdd(ME3_UnitCreateCow());
 
   while (TRUE)
   {
@@ -176,6 +176,9 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
     if (wParam == VK_ESCAPE)
       SendMessage(hWnd, WM_DESTROY, 0, 0);
   case WM_MOUSEMOVE:
+    return 0;
+  case WM_MOUSEWHEEL:
+    ME3_MouseWheel += (SHORT)HIWORD(wParam);
     return 0;
 
   case WM_DESTROY:
