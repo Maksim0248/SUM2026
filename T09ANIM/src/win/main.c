@@ -112,6 +112,7 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
   ME3_AnimUnitAdd(ME3_UnitCreateBall());
   ME3_AnimUnitAdd(ME3_UnitCreateCam());
   ME3_AnimUnitAdd(ME3_UnitCreateCow());
+  ME3_AnimUnitAdd(ME3_UnitCreateGridBall());
 
   while (TRUE)
   {

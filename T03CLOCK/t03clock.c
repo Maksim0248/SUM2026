@@ -162,6 +162,8 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
     y = Yc - lenm * cos(angle);
     MoveToEx(hMemDC, Xc, Yc, NULL);
     //SetDCPenColor(hDC, RGB(200, 200, 0));
+    /*POINT pts[4] = {{Xc, Yc}, {4, -10}, {4, 6}, {10, 6}, {0, 14}, {-10, 6}, {-4, 6}};
+    Polygon(hMemDC,*/ 
     LineTo(hMemDC, x, y);
     /*minute*/
     angle = (st.wMinute + st.wSecond / 60.0) * 2 * PI / 60;

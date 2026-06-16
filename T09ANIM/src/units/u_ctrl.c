@@ -70,9 +70,9 @@ static VOID ME3_UnitResponse(me3UNIT_CONTROL *Uni, me3ANIM *Ani)
   Azimuth = R2D(atan2(sinP, cosP));
   Elevator = R2D(atan2(sinT, cosT));   /*!!! acos(cosT)*/
  
-  Azimuth += Ani->GlobalDeltaTime * 2 * 0 * (Ani->Keys[VK_LEFT] - Ani->Keys[VK_RIGHT]);
+  Azimuth += Ani->GlobalDeltaTime * 2 * (Ani->Keys[VK_LEFT] - Ani->Keys[VK_RIGHT]);
   Elevator += Ani->GlobalDeltaTime * 40 * (Ani->Keys[VK_DOWN] - Ani->Keys[VK_UP]);
-  Dist += Ani->GlobalDeltaTime * (0.1 * Ani->Mdz);
+  Dist += Ani->GlobalDeltaTime * (Ani->Mdz);
   if (Elevator < 0.1)
     Elevator = 0.1;
   if (Elevator > 178)
@@ -82,15 +82,14 @@ static VOID ME3_UnitResponse(me3UNIT_CONTROL *Uni, me3ANIM *Ani)
   if (Ani->KeysClick['P'])
     Ani->IsPause = !Ani->IsPause;
 
-  /*ME3_RndCamLoc =
+  ME3_RndCamLoc =
   PointTransform(VecSet(0, Dist, 0),
     MatrMulMatr(MatrRotateX(Elevator),
                 MatrRotateY(Azimuth)));
-  */
- ME3_RndCamLoc =
+ /*ME3_RndCamLoc =
   PointTransform(VecSet(0, Dist, 0),
-    MatrRotateX(Elevator));
-
+    MatrRotateX(Elevator));*/
+  
   ME3_RndCamSet(ME3_RndCamLoc, ME3_RndCamAt, VecSet(0, 1, 0));
 }
 

@@ -47,6 +47,7 @@ typedef enum tagme3PRIM_TYPE
   ME3_RND_PRIM_POINTS,   /* Array of points  – GL_POINTS */
   ME3_RND_PRIM_LINES,    /* Line segments (by 2 points) – GL_LINES */
   ME3_RND_PRIM_TRIMESH,  /* Triangle mesh - array of triangles – GL_TRIANGLES */
+  ME3_RND_PRIM_TRISTRIP,
 } me3PRIM_TYPE;
 
 
@@ -68,14 +69,21 @@ typedef struct tagme3PRIM
   MATR Trans;   /* Additional transformation matrix */
 } me3PRIM;
 
+/* Grid topology representation type */
+typedef struct tagme3GRID
+{
+  INT W, H;      /* Grid size (in vertices) */
+  me3VERTEX *V;  /* Array (2D) of vertex */
+} me3GRID;
+
 VOID ME3_RndPrimFree( me3PRIM *Pr );
 VOID ME3_RndPrimCreate( me3PRIM *Pr, me3PRIM_TYPE Type, me3VERTEX *V, INT NoofV, INT *Ind, INT NoofI );
 VOID ME3_RndPrimDraw( me3PRIM *Pr, MATR World );
 BOOL ME3_RndPrimCreateSphere( me3PRIM *Pr, DBL R, INT W, INT H );
 BOOL ME3_RndPrimLoad( me3PRIM *Pr, CHAR *FileName );
-VOID APIENTRY glDebugOutput( UINT Source, UINT Type, UINT Id, UINT Severity,
-                             INT Length, const CHAR *Message,
+VOID APIENTRY glDebugOutput( UINT Source, UINT Type, UINT Id, UINT Severity, INT Length, const CHAR *Message,
                              const VOID *UserParam );
-
+BOOL ME3_RndGridCreateSphere( me3GRID *G, FLT R, INT W, INT H );
+BOOL ME3_RndPrimFromGrid( me3PRIM *Pr, me3GRID *G );
 
 #endif /* __rnd_h_ */

@@ -233,6 +233,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\src\anim\rnd\rndgrid.c"
+						>
+					</File>
+					<File
 						RelativePath=".\src\anim\rnd\rndprim.c"
 						>
 					</File>
@@ -295,6 +299,10 @@
 				</File>
 				<File
 					RelativePath=".\src\units\u_ctrl.c"
+					>
+				</File>
+				<File
+					RelativePath=".\src\units\u_gridball.c"
 					>
 				</File>
 				<File
