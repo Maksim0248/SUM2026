@@ -12,7 +12,6 @@ VOID ME3_RndResInit( VOID )
 VOID ME3_RndResClose( VOID )
 {
   ME3_RndMtlClose();
-  ME3_RndShdClose();
   ME3_RndTexClose();
-  
+  ME3_RndShdClose();  
 }

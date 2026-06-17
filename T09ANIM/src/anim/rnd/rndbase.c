@@ -14,9 +14,29 @@
 
 VOID ME3_RndInit( HWND hWnd )
 { 
-  INT i;
+  INT i, nums;
+  HGLRC hRC;
   PIXELFORMATDESCRIPTOR pfd = {0};
 
+  INT PixelAttribs[] =
+  {
+    WGL_DRAW_TO_WINDOW_ARB, TRUE,
+    WGL_SUPPORT_OPENGL_ARB, TRUE,
+    WGL_DOUBLE_BUFFER_ARB, TRUE,
+    WGL_PIXEL_TYPE_ARB, WGL_TYPE_RGBA_ARB,
+    WGL_ACCELERATION_ARB, WGL_FULL_ACCELERATION_ARB,
+    WGL_COLOR_BITS_ARB, 32,
+    WGL_DEPTH_BITS_ARB, 32,
+    0
+  };
+  INT ContextAttribs[] =
+  {
+    WGL_CONTEXT_MAJOR_VERSION_ARB, 4,
+    WGL_CONTEXT_MINOR_VERSION_ARB, 6,
+    WGL_CONTEXT_PROFILE_MASK_ARB, WGL_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB,
+                                  /* WGL_CONTEXT_CORE_PROFILE_BIT_ARB, */
+    0
+  };
   ME3_hRndWnd = hWnd;
 
   /* Prepare frame compatible device contesxt */
@@ -40,6 +60,15 @@ VOID ME3_RndInit( HWND hWnd )
   if (glewInit() != GLEW_OK)
     exit(0);
 
+  wglChoosePixelFormatARB(ME3_hRndDC, PixelAttribs, NULL, 1, &i, &nums);
+  hRC = wglCreateContextAttribsARB(ME3_hRndDC, NULL, ContextAttribs);
+ 
+  wglMakeCurrent(NULL, NULL);
+  wglDeleteContext(ME3_hRndGLRC);
+ 
+  ME3_hRndGLRC = hRC;
+  wglMakeCurrent(ME3_hRndDC, ME3_hRndGLRC);
+
   #ifndef NDEBUG
     OutputDebugString(glGetString(GL_VERSION));
     OutputDebugString("\n");
@@ -61,7 +90,7 @@ VOID ME3_RndInit( HWND hWnd )
 
   ME3_RndProjSize = 0.1;
   ME3_RndProjDist = ME3_RndProjSize;
-  ME3_RndProjFarClip = 300;
+  ME3_RndProjFarClip = 3000;
   ME3_RndFrameW = 47;
   ME3_RndFrameH = 47;
   

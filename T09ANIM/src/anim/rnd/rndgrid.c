@@ -134,7 +134,8 @@ BOOL ME3_RndGridCreateSphere( me3GRID *G, FLT R, INT W, INT H )
   for (k = 0, i = 0, theta = 0; i < H; i++, theta += PI / (H - 1))
     for (j = 0, phi = 0; j < W; j++, phi += 2 * PI / (W - 1))
     {
-      G->V[k].C = VecSet4(1, 1, 0, 1);
+      G->V[k].N = VecSet(1, 0, 0);
+      G->V[k].C = VecSet4(1, 0, 0, 1);
       G->V[k++].P = VecSet(R * sin(theta) * sin(phi),
                            R * cos(theta),
                            R * sin(theta) * cos(phi));

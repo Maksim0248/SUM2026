@@ -14,7 +14,7 @@ void main( void )
   vec3 L;
   float nl;
   
-  if (DrawPos.y > 10 * sin(Time))
+  if (DrawPos.y > 10 * abs(sin(Time / 10)))
     discard;
   L = normalize(vec3(sin(Time), sin(Time), 1));
   
