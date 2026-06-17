@@ -42,6 +42,7 @@ static VOID ME3_UnitResponse(me3UNIT_BALL *Uni, me3ANIM *Ani)
 
 static VOID ME3_UnitRender(me3UNIT_BALL *Uni, me3ANIM *Ani, me3PRIM *sph)
 {
+  Uni->Bl.MtlNo = 0;
   ME3_RndPrimDraw(&Uni->Bl, MatrTranslate(Uni->Pos));
 }
 

@@ -10,7 +10,7 @@
 #define GLEW_STATIC
 #include "OpenGL/glew.h"
 
-#include "def.h"
+
 #include "res/rndres.h"
 
 extern HWND ME3_hRndWnd;
@@ -67,6 +67,7 @@ typedef struct tagme3PRIM
   VEC MinBB, MaxBB;  /* Bound box */
  
   MATR Trans;   /* Additional transformation matrix */
+  INT MtlNo;
 } me3PRIM;
 
 /* Grid topology representation type */
@@ -85,5 +86,5 @@ VOID APIENTRY glDebugOutput( UINT Source, UINT Type, UINT Id, UINT Severity, INT
                              const VOID *UserParam );
 BOOL ME3_RndGridCreateSphere( me3GRID *G, FLT R, INT W, INT H );
 BOOL ME3_RndPrimFromGrid( me3PRIM *Pr, me3GRID *G );
-
+VOID ME3_RndGridFree( me3GRID *G );
 #endif /* __rnd_h_ */

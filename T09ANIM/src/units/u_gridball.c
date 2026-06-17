@@ -20,6 +20,7 @@ static VOID ME3_UnitInit(me3UNIT_BALL *Uni, me3ANIM *Ani)
   ME3_RndGridCreateSphere(&Uni->GrBl, 2, 10, 10);
   ME3_RndPrimFromGrid(&Uni->Bl, &Uni->GrBl);
   Uni->Pos = VecSet(0, 2, 0);
+  ME3_RndGridFree(&Uni->GrBl);
 }
 
 static VOID ME3_UnitResponse(me3UNIT_BALL *Uni, me3ANIM *Ani)
@@ -28,6 +29,7 @@ static VOID ME3_UnitResponse(me3UNIT_BALL *Uni, me3ANIM *Ani)
 
 static VOID ME3_UnitRender(me3UNIT_BALL *Uni, me3ANIM *Ani, me3PRIM *sph)
 {
+  Uni->Bl.MtlNo = 0;
   ME3_RndPrimDraw(&Uni->Bl, MatrTranslate(Uni->Pos));
 }
 
@@ -35,7 +37,6 @@ static VOID ME3_UnitClose(me3UNIT_BALL *Uni, me3ANIM *Ani)
 {
   ME3_RndPrimFree(&Uni->Bl);
 }
-
 
 me3UNIT * ME3_UnitCreateGridBall( VOID )
 {

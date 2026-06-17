@@ -125,32 +125,33 @@ VOID ME3_RndPrimDraw( me3PRIM *Pr, MATR World )
   MATR wvp = MatrMulMatr(MatrMulMatr(Pr->Trans, World), ME3_RndMatrVP);
   MATR wn = MatrTranspose(MatrInverse(MatrMulMatr(Pr->Trans, World)));
   MATR w = MatrMulMatr(Pr->Trans, World);
-
+  
   INT prim_type =
     Pr->Type == ME3_RND_PRIM_LINES ? GL_LINES :
     Pr->Type == ME3_RND_PRIM_TRIMESH ? GL_TRIANGLES :
+    Pr->Type == ME3_RND_PRIM_TRISTRIP ? GL_TRIANGLE_STRIP :
     GL_POINTS;
-  UINT ProgId;
+  INT ProgId;
   INT loc;
   
   /*prim_type = GL_POINTS;
   glPointSize(5);
-  glEnable(GL_POINT_SMOOTH);*/
+  glEnable(GL_POINT_SMOOTH);
   glEnable(GL_CULL_FACE);
-  glCullFace(GL_BACK);
+  glCullFace(GL_BACK);*/
+  
+  if ((ProgId = ME3_RndMtlApply(Pr->MtlNo)) == 0)
+    return;
 
-  ProgId = ME3_RndShaders[0].ProgId;
-  glUseProgram(ProgId);
+  if ((loc = glGetUniformLocation(ProgId, "Time")) != -1)
+    glUniform1f(loc, ME3_Anim.GlobalTime);
   if ((loc = glGetUniformLocation(ProgId, "MatrWVP")) != -1)
     glUniformMatrix4fv(loc, 1, FALSE, wvp.A[0]);
   if ((loc = glGetUniformLocation(ProgId, "MatrWN")) != -1)
     glUniformMatrix4fv(loc, 1, FALSE, wn.A[0]);
   if ((loc = glGetUniformLocation(ProgId, "MatrW")) != -1)
     glUniformMatrix4fv(loc, 1, FALSE, w.A[0]);
-  if ((loc = glGetUniformLocation(ProgId, "Time")) != -1)
-    glUniform1f(loc, ME3_Anim.GlobalTime);
-  //glLoadMatrixf(wvp.A[0]);
- 
+
   glBindVertexArray(Pr->VA);/*activate*/
   if (Pr->IBuf == 0)
     glDrawArrays(prim_type, 0, Pr->NumOfElements);
@@ -162,7 +163,7 @@ VOID ME3_RndPrimDraw( me3PRIM *Pr, MATR World )
   }
   glBindVertexArray(0);
   glUseProgram(0);
-} /* End of 'me3_RndPrimDraw' function */
+} /* End of 'ME3_RndPrimDraw' function */
 
 
 
@@ -181,7 +182,7 @@ BOOL ME3_RndPrimCreateSphere( me3PRIM *Pr, DBL R, INT W, INT H )
     return FALSE;
   Ind = (INT *)(V + W * H);
  
-
+ 
   /* Fill vertex array */
   for (k = 0, i = 0, theta = 0; i < H; i++, theta += PI / (H - 1))
     for (j = 0, phi = 0; j < W; j++, phi += 2 * PI / (W - 1))

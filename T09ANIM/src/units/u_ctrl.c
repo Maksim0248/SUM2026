@@ -14,15 +14,16 @@ struct tagUNIT_CONTROL
   me3UNIT_BASE_FIELDS;
   DBL Speed;
   DBL AngleSpeed;
-  VEC CamAt;
-  VEC CamLoc;
+  //VEC CamAt;
+  //VEC CamLoc;
 };
 
 static VOID ME3_UnitInit(me3UNIT_CONTROL *Uni, me3ANIM *Ani)
 {
   Uni->Speed = 10;
-  Uni->CamAt = VecSet(0, 4, 0);
-  Uni->CamLoc = VecSet(-50, 5, 0);
+  //Uni->CamAt = VecSet(0, 4, 0);
+  //Uni->CamLoc = VecSet(-50, 5, 0);
+  ME3_RndCamLoc = VecSet(-50, 5, 0);
   Uni->AngleSpeed = 0.008;
 }
 
@@ -45,7 +46,8 @@ static VOID ME3_UnitResponse(me3UNIT_CONTROL *Uni, me3ANIM *Ani)
     a += -0.1;*/
   //Uni->PosCam.X += SpeedX * Ani->DeltaTime;
   //ME3_RndCamSet(VecAddVec(VecSet(0, 0, 0), Uni->PosCam), VecAddVec(VecSet(cos(a), 0, sin(a)), Uni->PosCam), VecSet(0, 1, 0));
-  /*VEC d;
+  /*
+  VEC d;
   d = VecNormalize(VecSubVec(Uni->CamAt, Uni->CamLoc));
   Uni->CamLoc =
     VecAddVec(Uni->CamLoc,
@@ -54,7 +56,9 @@ static VOID ME3_UnitResponse(me3UNIT_CONTROL *Uni, me3ANIM *Ani)
   Uni->CamLoc =
     PointTransform(Uni->CamLoc,
     MatrRotateY(Ani->Keys[VK_LBUTTON] * Uni->AngleSpeed * Ani->Mdx));
-  ME3_RndCamSet(Uni->CamLoc, Uni->CamAt, VecSet(0, 1, 0));*/
+  ME3_RndCamSet(Uni->CamLoc, Uni->CamAt, VecSet(0, 1, 0));
+  */
+
   FLT Dist, plen;
   DBL cosT, sinT, cosP, sinP, Azimuth, Elevator;
   Dist = VecLen(VecSubVec(ME3_RndCamAt, ME3_RndCamLoc));
@@ -66,13 +70,12 @@ static VOID ME3_UnitResponse(me3UNIT_CONTROL *Uni, me3ANIM *Ani)
   cosP = (ME3_RndCamLoc.Z - ME3_RndCamAt.Z) / plen;
   sinP = (ME3_RndCamLoc.X - ME3_RndCamAt.X) / plen;
  
- 
   Azimuth = R2D(atan2(sinP, cosP));
   Elevator = R2D(atan2(sinT, cosT));   /*!!! acos(cosT)*/
  
-  Azimuth += Ani->GlobalDeltaTime * 2 * (Ani->Keys[VK_LEFT] - Ani->Keys[VK_RIGHT]);
+  Azimuth += Ani->GlobalDeltaTime * 40 * (Ani->Keys[VK_RIGHT] - Ani->Keys[VK_LEFT]);
   Elevator += Ani->GlobalDeltaTime * 40 * (Ani->Keys[VK_DOWN] - Ani->Keys[VK_UP]);
-  Dist += Ani->GlobalDeltaTime * (Ani->Mdz);
+  Dist += Ani->GlobalDeltaTime * 50 * (Ani->Mdz);
   if (Elevator < 0.1)
     Elevator = 0.1;
   if (Elevator > 178)
@@ -83,10 +86,11 @@ static VOID ME3_UnitResponse(me3UNIT_CONTROL *Uni, me3ANIM *Ani)
     Ani->IsPause = !Ani->IsPause;
 
   ME3_RndCamLoc =
-  PointTransform(VecSet(0, Dist, 0),
-    MatrMulMatr(MatrRotateX(Elevator),
-                MatrRotateY(Azimuth)));
- /*ME3_RndCamLoc =
+    PointTransform(VecSet(0, Dist, 0),
+      MatrMulMatr(MatrRotateX(Elevator),
+                  MatrRotateY(Azimuth)));
+  
+  /*ME3_RndCamLoc =
   PointTransform(VecSet(0, Dist, 0),
     MatrRotateX(Elevator));*/
   

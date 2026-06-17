@@ -53,7 +53,7 @@ BOOL ME3_RndPrimFromGrid( me3PRIM *Pr, me3GRID *G )
 {
   INT i, j, k, num_of_indices;
   INT *Ind;
-
+  
   memset(Pr, 0, sizeof(me3PRIM));
  
   num_of_indices = (G->W * 2 + 1) * (G->H - 1) - 1;
@@ -80,9 +80,36 @@ BOOL ME3_RndPrimFromGrid( me3PRIM *Pr, me3GRID *G )
  *       me3GRID *G;
  * RETURNS: None.
  */
-VOID ME3_RndGridAutoNormals( me3GRID *G )
+/*VOID ME3_RndGridAutoNormals( me3GRID *G )
 {
-}
+  INT i, j;
+
+  for (i = 0; i < G->W * G->H; i++)
+    G->V[i].N = VecSet(0, 0, 0);
+ 
+  for (i = 0; i < G->H - 1; i++)
+    for (j = 0; j < G->W - 1; j++)
+    {
+      me3VERTEX
+        *P00 = G->V + i * G->W + j,
+        *P01 = G->V + i * G->W + j + 1,
+        *P10 = G->V + (i + 1) * G->W + j,
+        *P11 = G->V + (i + 1) * G->W + j + 1;
+      VEC N;
+ 
+      N = VecNormalize(VecCrossVec(VecSubVec(P00->P, P10->P),
+                                   VecSubVec(P11->P, P10->P)));
+      P00->N = VecAddVec(P00->N, N);
+      P10->N = VecAddVec(P10->N, N);
+      P11->N = VecAddVec(P11->N, N);
+ 
+      N = VecNormalize(VecCrossVec(VecSubVec(P11->P, P01->P),
+                                   VecSubVec(P00->P, P01->P)));
+      P00->N = VecAddVec(P00->N, N);
+      P01->N = VecAddVec(P01->N, N);
+      P11->N = VecAddVec(P11->N, N);
+    }
+}*/
 
 /* Create sphere grid function.
  * ARGUMENTS:

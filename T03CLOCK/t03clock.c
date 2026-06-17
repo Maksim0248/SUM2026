@@ -45,6 +45,32 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
   return msg.wParam;
 }
 
+void DrawArrow2( HWND hWnd, HDC hDC, INT Xc, INT Yc, INT L, INT W, INT H )
+{
+  POINT pts[7] = {{-4, -10}, {4, -10}, {4, 6}, {10, 6}, {0, 14}, {-10, 6}, {-4, 6}};
+  POINT pts_res[sizeof(pts) / sizeof(pts[0])]; 
+  int N = sizeof(pts) / sizeof(pts[0]);
+  POINT pt;
+  INT i;
+  DOUBLE x, y, len;
+
+
+  GetCursorPos(&pt);
+  ScreenToClient(hWnd, &pt);
+  len = hypot(pt.x - Xc, pt.y - Yc);
+  x = Xc + (pt.x - Xc) * L / len;
+  y = Yc + (pt.y - Yc) * L / len;
+  /*MoveToEx(hDC, Xc, Yc, NULL);
+  LineTo(hDC, x, y);*/
+  for (i = 0; i < N; i++)
+  {
+    pts_res[i].x = Xc + pts[i].x * (pt.y - Yc)/len + pts[i].y * (pt.x - Xc)/len;
+    pts_res[i].y = Yc + pts[i].y * (pt.y - Yc)/len - pts[i].x * (pt.x - Xc)/len;
+  }
+  Polygon(hDC, pts_res, N);
+}
+
+
 VOID FlipFullScreen( HWND hWnd )
 {
   static BOOL IsFullScreen = FALSE;
@@ -161,15 +187,14 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
     x = Xc + lenm * sin(angle);
     y = Yc - lenm * cos(angle);
     MoveToEx(hMemDC, Xc, Yc, NULL);
-    //SetDCPenColor(hDC, RGB(200, 200, 0));
-    /*POINT pts[4] = {{Xc, Yc}, {4, -10}, {4, 6}, {10, 6}, {0, 14}, {-10, 6}, {-4, 6}};
-    Polygon(hMemDC,*/ 
+    SetDCPenColor(hDC, RGB(200, 200, 0));
     LineTo(hMemDC, x, y);
     /*minute*/
     angle = (st.wMinute + st.wSecond / 60.0) * 2 * PI / 60;
     x = Xc + (lenm - 10) * sin(angle);
     y = Yc - (lenm - 10) * cos(angle);
     MoveToEx(hMemDC, Xc, Yc, NULL);
+    //DrawArrow2( hWnd, hMemDC, Xc, Yc, 1000, W, H);
     LineTo(hMemDC, x, y);
     /* hour */
     angle = (st.wHour % 12 + st.wMinute / 60.0) * 2 * PI / 12;

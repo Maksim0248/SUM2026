@@ -28,6 +28,7 @@ static VOID ME3_UnitResponse(me3UNIT_COW *Uni, me3ANIM *Ani)
 
 static VOID ME3_UnitRender(me3UNIT_COW *Uni, me3ANIM *Ani, me3PRIM *sph)
 {
+  Uni->Cw.MtlNo = 0;
   ME3_RndPrimDraw(&Uni->Cw, MatrMulMatr(MatrMulMatr(MatrTranslate(Uni->Pos), MatrScale(VecSet(1, 1, 1))), MatrRotateY(180)));
 }
 

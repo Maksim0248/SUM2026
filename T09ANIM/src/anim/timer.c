@@ -41,6 +41,7 @@ VOID TimerResponse( VOID )
   /* Time with pause */
   if (ME3_Anim.IsPause)
   {
+
     ME3_Anim.DeltaTime = 0;
     PauseTime += t.QuadPart - OldTime;
   }

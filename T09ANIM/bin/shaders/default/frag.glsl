@@ -7,13 +7,14 @@ in vec3 DrawNormal;
 in vec3 DrawPos;
  
 uniform float Time; 
+uniform float Ph; 
 
 void main( void )
 {
   vec3 L;
   float nl;
   
-  if (DrawPos.y > 3 * abs(sin(Time / 5)))
+  if (DrawPos.y > 10 * sin(Time))
     discard;
   L = normalize(vec3(sin(Time), sin(Time), 1));
   

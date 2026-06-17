@@ -54,9 +54,11 @@ VOID ME3_RndInit( HWND hWnd )
 
   /* Render parameters setup */
   glEnable(GL_DEPTH_TEST);
+  wglSwapIntervalEXT(0);
 
   glEnable(GL_PRIMITIVE_RESTART);
   glPrimitiveRestartIndex(-1);
+
   ME3_RndProjSize = 0.1;
   ME3_RndProjDist = ME3_RndProjSize;
   ME3_RndProjFarClip = 300;

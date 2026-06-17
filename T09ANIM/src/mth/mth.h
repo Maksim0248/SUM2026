@@ -240,10 +240,10 @@ __inline MATR MatrRotateX( FLT AngleInDegree )
 
 __inline MATR MatrRotateY( FLT AngleInDegree )
 {
-  FLT co = cos(AngleInDegree);
-  FLT si = sin(AngleInDegree);
+  FLT A = D2R(AngleInDegree);
+  FLT co = cos(A);
+  FLT si = sin(A);
 
-  AngleInDegree = D2R(AngleInDegree);
 
   return MatrSet(co, 0, -si, 0,
                  0, 1, 0, 0,
