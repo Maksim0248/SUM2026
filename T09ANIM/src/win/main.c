@@ -114,6 +114,7 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
   ME3_AnimUnitAdd(ME3_UnitCreateCow());
   ME3_AnimUnitAdd(ME3_UnitCreateGridBall());
   ME3_AnimUnitAdd(ME3_UnitCreateTex());
+  ME3_AnimUnitAdd(ME3_UnitCreateBKMaze1());
 
   while (TRUE)
   {

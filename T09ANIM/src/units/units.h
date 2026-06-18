@@ -14,6 +14,8 @@ me3UNIT * ME3_UnitCreateCam( VOID );
 me3UNIT * ME3_UnitCreateCow( VOID );
 me3UNIT * ME3_UnitCreateGridBall( VOID );
 me3UNIT * ME3_UnitCreateTex( VOID );
+me3UNIT * ME3_UnitCreateBKMaze1( VOID );
+
 #endif /* __units_h_ */
 
 /* END OF 'units.h' FILE */
