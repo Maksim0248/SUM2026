@@ -302,6 +302,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\units\u_bkmaze1.c"
+					>
+				</File>
+				<File
 					RelativePath=".\src\units\u_cow.c"
 					>
 				</File>

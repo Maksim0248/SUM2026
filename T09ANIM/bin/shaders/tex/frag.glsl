@@ -9,7 +9,7 @@ layout(location = 0) out vec4 OutColor;
 in vec4 DrawColor;
 in vec2 DrawTexCoord;
  
-layout(binding = 1) uniform sampler2D Tex;
+layout(binding = 2) uniform sampler2D Tex;
 
 void main( void )
 {

@@ -55,7 +55,7 @@ static VOID ME3_UnitInit(me3UNIT_TEX *Uni, me3ANIM *Ani)
   ME3_RndPrimCreate(&Uni->Pr, ME3_RND_PRIM_TRISTRIP, V, 4, NULL, 0);
   Uni->Pr.MtlNo = Uni->MtlNo;
 
-  if ((F = fopen("bin\\models\\BRwall.jpg", "rb")) != NULL)
+  if ((F = fopen("bin\\textures\\BRwall.g24", "rb")) != NULL)
   {
     INT w = 0, h = 0;
     VOID *mem;
@@ -90,7 +90,7 @@ static VOID ME3_UnitRender(me3UNIT_TEX *Uni, me3ANIM *Ani, me3PRIM *sph)
 {
   glActiveTexture(GL_TEXTURE0 + 1);
   glBindTexture(GL_TEXTURE_2D, Uni->TexId[0]);  
-
+  
   glActiveTexture(GL_TEXTURE0 + 2);
   glBindTexture(GL_TEXTURE_2D, Uni->TexId[1]);  
 

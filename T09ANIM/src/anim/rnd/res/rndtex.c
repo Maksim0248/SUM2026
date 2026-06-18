@@ -6,11 +6,16 @@ INT ME3_RndTexturesSize = 0;                      /* Textures array store size *
 
 VOID ME3_RndTexInit( VOID )
 {
-
+  ME3_RndTexturesSize = 0;
 }
 
 VOID ME3_RndTexClose( VOID )
 {
+  INT i;
+
+  for (i = 0; i < ME3_RndTexturesSize; i++)
+    glDeleteTextures(1, &ME3_RndTextures[i].TexId);
+  ME3_RndTexturesSize = 0;
 }
 
 
@@ -50,5 +55,47 @@ INT ME3_RndTexAddImg( CHAR *Name, INT W, INT H, INT C, VOID *Bits )
 
 INT ME3_RndTexAdd( CHAR *Name, INT W, INT H, INT C, VOID *Bits )
 {
-  return -1;
-}
+  INT ret = -1;
+  HBITMAP hBm;
+  FILE *F;
+ 
+  if ((hBm = LoadImage(NULL, Name, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION)) != NULL)
+  {
+    BITMAP Bm;
+ 
+    GetObject(hBm, sizeof(BITMAP), &Bm);
+    if (Bm.bmBitsPixel == 24 || Bm.bmBitsPixel == 32 || Bm.bmBitsPixel == 8)
+      ret = ME3_RndTexAddImg(Name, Bm.bmWidth, Bm.bmHeight, Bm.bmBitsPixel >> 3, Bm.bmBits); 
+    DeleteObject(hBm);
+    return ret;
+  }
+  if ((F = fopen(Name, "rb")) != NULL)
+  {
+    INT w = 0, h = 0, flen, components = -1;
+    VOID *mem;
+ 
+    fread(&w, 2, 1, F);
+    fread(&h, 2, 1, F);
+ 
+    fseek(F, 0, SEEK_END);
+    flen = ftell(F);
+    fseek(F, 4, SEEK_END);
+ 
+    if (w * h * 4 + 4 == flen)
+      components = 4;
+    else if (w * h * 3 + 4 == flen)
+      components = 3;
+    else if (w * h * 1 + 4 == flen)
+      components = 1;
+ 
+    if (components != -1)
+      if ((mem = malloc(w * h * components)) != NULL)
+      {
+        fread(mem, components, w * h, F);
+        ret = ME3_RndTexAddImg(Name, w, h, components, mem); 
+        free(mem);
+      }
+    fclose(F);
+  }
+  return ret;
+} /* End of 'ME3_RndTexAddFromFile' function */

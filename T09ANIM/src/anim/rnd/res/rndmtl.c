@@ -77,5 +77,13 @@ INT ME3_RndMtlApply( INT MtlNo )
     glUniform1f(loc, mtl->Ph);
   if ((loc = glGetUniformLocation(prg, "Trans")) != -1)
     glUniform1f(loc, mtl->Trans);
+  for (i = 0; i < 8; i++)
+  {
+    if (mtl->Tex[i] != -1 && mtl->Tex[i] > 0 && mtl->Tex[i] < ME3_MAX_TEXTURES)
+    {
+      glActiveTexture(GL_TEXTURE0 + i);
+      glBindTexture(GL_TEXTURE_2D, ME3_RndTextures[mtl->Tex[i]].TexId);  
+    }  
+  }  
   return prg;
 }
