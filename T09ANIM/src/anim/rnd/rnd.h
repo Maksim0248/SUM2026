@@ -70,6 +70,13 @@ typedef struct tagme3PRIM
   INT MtlNo;
 } me3PRIM;
 
+typedef struct tagme3PRIMS
+{
+  INT NumOfPrims; /* Number of primitives in array */  
+  me3PRIM *Prims; /* Array of primitives */
+  MATR Trans;     /* Common transformation matrix */
+} me3PRIMS;
+
 /* Grid topology representation type */
 typedef struct tagme3GRID
 {

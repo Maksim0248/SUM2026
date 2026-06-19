@@ -79,5 +79,6 @@ VOID ME3_RndMtlClose( VOID );
 INT ME3_RndMtlAdd( me3MATERIAL *Mtl );
 me3MATERIAL ME3_RndMtlGetDef( VOID );
 UINT ME3_RndMtlApply( INT MtlNo );
+me3MATERIAL * ME3_RndMtlGet( INT No );
 
 #endif /*__rndres_h_*/

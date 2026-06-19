@@ -87,3 +87,8 @@ INT ME3_RndMtlApply( INT MtlNo )
   }  
   return prg;
 }
+
+me3MATERIAL * ME3_RndMtlGet( INT No )
+{
+  return &ME3_RndMaterials[No];
+}
