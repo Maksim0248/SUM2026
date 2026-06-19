@@ -53,23 +53,23 @@ INT ME3_RndTexAddImg( CHAR *Name, INT W, INT H, INT C, VOID *Bits )
   return ME3_RndTexturesSize++;
 } /* End of 'VG4_RndTexAddImg' function */
 
-INT ME3_RndTexAdd( CHAR *Name, INT W, INT H, INT C, VOID *Bits )
+INT ME3_RndTexAddFromFile( CHAR *FileName )
 {
   INT ret = -1;
   HBITMAP hBm;
   FILE *F;
  
-  if ((hBm = LoadImage(NULL, Name, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION)) != NULL)
+  if ((hBm = LoadImage(NULL, FileName, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION)) != NULL)
   {
     BITMAP Bm;
  
     GetObject(hBm, sizeof(BITMAP), &Bm);
     if (Bm.bmBitsPixel == 24 || Bm.bmBitsPixel == 32 || Bm.bmBitsPixel == 8)
-      ret = ME3_RndTexAddImg(Name, Bm.bmWidth, Bm.bmHeight, Bm.bmBitsPixel >> 3, Bm.bmBits); 
+      ret = ME3_RndTexAddImg(FileName, Bm.bmWidth, Bm.bmHeight, Bm.bmBitsPixel >> 3, Bm.bmBits); 
     DeleteObject(hBm);
     return ret;
   }
-  if ((F = fopen(Name, "rb")) != NULL)
+  if ((F = fopen(FileName, "rb")) != NULL)
   {
     INT w = 0, h = 0, flen, components = -1;
     VOID *mem;
@@ -92,7 +92,7 @@ INT ME3_RndTexAdd( CHAR *Name, INT W, INT H, INT C, VOID *Bits )
       if ((mem = malloc(w * h * components)) != NULL)
       {
         fread(mem, components, w * h, F);
-        ret = ME3_RndTexAddImg(Name, w, h, components, mem); 
+        ret = ME3_RndTexAddImg(FileName, w, h, components, mem); 
         free(mem);
       }
     fclose(F);

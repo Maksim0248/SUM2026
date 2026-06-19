@@ -15,10 +15,10 @@ void main( void )
   float nl;
   
   if (DrawPos.y > 10 * abs(sin(Time / 10)))
-    discard;
+    ;
   L = normalize(vec3(sin(Time), sin(Time), 1));
   
   nl = max(dot(DrawNormal, L), 0.4);
-  OutColor = vec4(DrawNormal, 1) * nl;
+  OutColor = vec4(DrawColor.rgb, 1) * nl;
   //DrawColor.rgb
 }

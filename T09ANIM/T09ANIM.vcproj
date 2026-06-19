@@ -306,10 +306,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\src\units\u_bkmaze1.c"
-					>
-				</File>
-				<File
 					RelativePath=".\src\units\u_cow.c"
 					>
 				</File>
@@ -318,11 +314,19 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\units\u_g3dm.c"
+					>
+				</File>
+				<File
 					RelativePath=".\src\units\u_gridball.c"
 					>
 				</File>
 				<File
 					RelativePath=".\src\units\u_tex.c"
+					>
+				</File>
+				<File
+					RelativePath=".\src\units\u_wall.c"
 					>
 				</File>
 				<File

@@ -94,4 +94,10 @@ VOID APIENTRY glDebugOutput( UINT Source, UINT Type, UINT Id, UINT Severity, INT
 BOOL ME3_RndGridCreateSphere( me3GRID *G, FLT R, INT W, INT H );
 BOOL ME3_RndPrimFromGrid( me3PRIM *Pr, me3GRID *G );
 VOID ME3_RndGridFree( me3GRID *G );
+BOOL ME3_RndPrimsCreate( me3PRIMS *Prs, INT NumOfPrims );
+VOID ME3_RndPrimsFree( me3PRIMS *Prs );
+VOID ME3_RndPrimsDraw( me3PRIMS *Prs, MATR World );
+BOOL ME3_RndPrimsLoad( me3PRIMS *Prs, CHAR *FileName );
+
+
 #endif /* __rnd_h_ */

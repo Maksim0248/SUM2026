@@ -139,7 +139,7 @@ VOID ME3_RndPrimDraw( me3PRIM *Pr, MATR World )
   glEnable(GL_POINT_SMOOTH);
   glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);*/
-  
+   
   if ((ProgId = ME3_RndMtlApply(Pr->MtlNo)) == 0)
     return;
 

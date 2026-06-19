@@ -63,9 +63,8 @@ extern INT ME3_RndTexturesSize;                      /* Textures array store siz
 VOID ME3_RndTexInit( VOID );
 VOID ME3_RndTexClose( VOID );
 INT VG4_RndTexAddImg( CHAR *Name, INT W, INT H, INT C, VOID *Bits );
-INT ME3_RndTexAdd( CHAR *Name, INT W, INT H, INT C, VOID *Bits );
-
-
+INT ME3_RndTexAddImg( CHAR *Name, INT W, INT H, INT C, VOID *Bits );
+INT ME3_RndTexAddFromFile( CHAR *FileName );
 
 
 /* Materials */

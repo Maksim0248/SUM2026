@@ -83,7 +83,7 @@ VOID ME3_RndPrimsDraw( me3PRIMS *Prs, MATR World )
   glDisable(GL_CULL_FACE);
 } /* End of 'VG4_RndPrimsDraw' function */
 
-#if 0
+
 /* Load primitives from '*.G3DM' file function.
  * ARGUMENTS:
  *   - pointer to primitives to create:
@@ -103,6 +103,7 @@ BOOL ME3_RndPrimsLoad( me3PRIMS *Prs, CHAR *FileName )
   DWORD NumOfPrims;
   DWORD NumOfMaterials;
   DWORD NumOfTextures;
+  INT i;
   struct tagG3DM_MATERIAL
   {
     CHAR Name[300]; /* Material name */
@@ -116,12 +117,12 @@ BOOL ME3_RndPrimsLoad( me3PRIMS *Prs, CHAR *FileName )
     CHAR ShaderString[300]; /* Additional shader information */
     DWORD Shader;       /* Shader number (uses after load into memory) */
   } *mtls;
-  MATR trans_m = ME3_RndPrimsLoadTransform, trans_minv = MatrTranspose(MatrInverse(trans_m));
+  //MATR trans_m = ME3_RndPrimsLoadTransform, trans_minv = MatrTranspose(MatrInverse(trans_m));
  
-  ME3_RndPrimsLoadTransform = MatrIdentity();
+  //ME3_RndPrimsLoadTransform = MatrIdentity();
  
   /* Read whole file to memory */
-  memset(Prs, 0, sizeof(vg4PRIMS));
+  memset(Prs, 0, sizeof(me3PRIMS));
   if ((F = fopen(FileName, "rb")) == NULL)
     return FALSE;
   fseek(F, 0, SEEK_END);
@@ -165,7 +166,7 @@ BOOL ME3_RndPrimsLoad( me3PRIMS *Prs, CHAR *FileName )
     DWORD NumOfVertexes;
     DWORD NumOfFacetIndexes;
     DWORD MtlNo;
-    vg4VERTEX *V;
+    me3VERTEX *V;
     INT *Ind;
     UINT i;
  
@@ -180,14 +181,14 @@ BOOL ME3_RndPrimsLoad( me3PRIMS *Prs, CHAR *FileName )
     Ind = (INT *)ptr;
     ptr += sizeof(INT) * NumOfFacetIndexes;
  
-    for (i = 0; i < NumOfVertexes; i++)
+    /*for (i = 0; i < NumOfVertexes; i++)
     {
       V[i].P = PointTransform(V[i].P, trans_m);
       V[i].N = VectorTransform(V[i].N, trans_minv);
-    }
+    }*/
  
     ME3_RndPrimCreate(&Prs->Prims[p], ME3_RND_PRIM_TRIMESH, V, NumOfVertexes, Ind, NumOfFacetIndexes);
-    Prs->Prims[p].MtlNo = VG4_RndMaterialsSize + MtlNo;
+    Prs->Prims[p].MtlNo = ME3_RndMaterialsSize + MtlNo;
   }
  
   /* Materials */
@@ -195,7 +196,7 @@ BOOL ME3_RndPrimsLoad( me3PRIMS *Prs, CHAR *FileName )
   ptr += sizeof(*mtls) * NumOfMaterials;
   for (m = 0; m < NumOfMaterials; m++)
   {
-    me3MATERIAL mtl = VG4_RndMtlGetDef();
+    me3MATERIAL mtl = ME3_RndMtlGetDef();
  
     mtl.Ka = VecMinVec(mtls[m].Ka, VecSet1(0.1));
     mtl.Kd = mtls[m].Kd;
@@ -204,7 +205,7 @@ BOOL ME3_RndPrimsLoad( me3PRIMS *Prs, CHAR *FileName )
     mtl.Trans = mtls[m].Trans;
     for (t = 0; t < 8; t++)
       if (mtls[m].Tex[t] != -1 && mtls[m].Tex[t] >= 0 && mtls[m].Tex[t] < NumOfTextures)
-        mtl.Tex[t] = VG4_RndTexturesSize + mtls[m].Tex[t];
+        mtl.Tex[t] = ME3_RndTexturesSize + mtls[m].Tex[t];
     ME3_RndMtlAdd(&mtl);
   }
  
@@ -221,12 +222,11 @@ BOOL ME3_RndPrimsLoad( me3PRIMS *Prs, CHAR *FileName )
     ptr += 4;
     C = *(DWORD *)ptr;
     ptr += 4;
-    VG4_RndTexAddImg(Name, W, H, C, ptr);
+    ME3_RndTexAddImg(Name, W, H, C, ptr);
     ptr += W * H * C;
   }
   free(mem);
   return TRUE;
 } /* End of 'VG4_RndPrimsDraw' function */
 
-#endif
 /* END OF 'rndprims.c' FILE */

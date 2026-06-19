@@ -44,7 +44,7 @@ static VOID ME3_UnitInit(me3UNIT_TEX *Uni, me3ANIM *Ani)
   glGenTextures(2, Uni->TexId); /*create object of texture*/
 
   glBindTexture(GL_TEXTURE_2D, Uni->TexId[0]); /* bind GL_TEXTURE_2D <--> Uni->TexId*/
-  glTexImage2D(GL_TEXTURE_2D, 0, 3, 2, 2, 0, GL_RGB, GL_FLOAT, t);
+  glTexImage2D(GL_TEXTURE_2D, 0, 3, 2, 2, 0, GL_RGB, GL_FLOAT, t);/*translate pixels to videocard*/
  
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -76,6 +76,7 @@ static VOID ME3_UnitInit(me3UNIT_TEX *Uni, me3ANIM *Ani)
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
+     
       free(mem);
     }
     fclose(F);
@@ -88,8 +89,9 @@ static VOID ME3_UnitResponse(me3UNIT_TEX *Uni, me3ANIM *Ani)
 
 static VOID ME3_UnitRender(me3UNIT_TEX *Uni, me3ANIM *Ani, me3PRIM *sph)
 {
-  glActiveTexture(GL_TEXTURE0 + 1);
-  glBindTexture(GL_TEXTURE_2D, Uni->TexId[0]);  
+
+  //glActiveTexture(GL_TEXTURE0 + 1);
+  //glBindTexture(GL_TEXTURE_2D, Uni->TexId[0]);  
   
   glActiveTexture(GL_TEXTURE0 + 2);
   glBindTexture(GL_TEXTURE_2D, Uni->TexId[1]);  
