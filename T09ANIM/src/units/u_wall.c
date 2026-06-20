@@ -30,7 +30,7 @@ static VOID ME3_UnitInit(me3UNIT_BKM *Uni, me3ANIM *Ani)
   Uni->Pos = VecSet(10, 2, 6);
   strcpy(mtl.Name, "BKMaze1");
   mtl.ShdNo = ME3_RndShdAdd("tex");
-  mtl.Tex[2] = ME3_RndTexAddFromFile("bin/textures/BRfloor.g24");
+  mtl.Tex[2] = ME3_RndTexAddFromFile("bin/textures/BRwall.g24");
 
   ME3_RndPrimCreate(&Uni->Pr, ME3_RND_PRIM_TRISTRIP, V, 4, NULL, 0);
   Uni->Pr.MtlNo = ME3_RndMtlAdd(&mtl); /*add to array of mtl and back number in array*/

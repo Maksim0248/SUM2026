@@ -91,7 +91,7 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
   wc.cbWndExtra = 0;
   wc.hbrBackground = (HBRUSH)COLOR_WINDOW;
   wc.hCursor = LoadCursor(NULL, IDC_HAND);
-  wc.hIcon = LoadIcon(NULL, IDI_SHIELD);
+  wc.hIcon = LoadIcon(NULL, IDHELP);
   wc.hInstance = hInstance;
   wc.lpszMenuName = NULL;
   wc.lpszClassName = WND_CLASS_NAME;
@@ -102,7 +102,7 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
     MessageBox(NULL, "Error", "ERROR", MB_YESNO | MB_ICONSTOP);
     return 0;
   }
-  hWnd = CreateWindow(WND_CLASS_NAME, "SummerPractice2026", WS_CLIPCHILDREN | WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+  hWnd = CreateWindow(WND_CLASS_NAME, "HORROR MAZE - Summer practise project 2026", WS_CLIPCHILDREN | WS_OVERLAPPEDWINDOW | WS_VISIBLE,
     CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, hInstance, NULL);
   /*--> WM_CREATE --> WM_SIZE -->*/
 
@@ -112,9 +112,9 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
   ME3_AnimUnitAdd(ME3_UnitCreateBall());
   ME3_AnimUnitAdd(ME3_UnitCreateCam());
   ME3_AnimUnitAdd(ME3_UnitCreateCow());
-  ME3_AnimUnitAdd(ME3_UnitCreateGridBall());
-  ME3_AnimUnitAdd(ME3_UnitCreateWall());
-  ME3_AnimUnitAdd(ME3_UnitCreateTex());
+  //ME3_AnimUnitAdd(ME3_UnitCreateGridBall());
+  //ME3_AnimUnitAdd(ME3_UnitCreateWall());
+  //ME3_AnimUnitAdd(ME3_UnitCreateTex());
   ME3_AnimUnitAdd(ME3_UnitCreateG3dm());
   while (TRUE)
   {

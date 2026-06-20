@@ -61,8 +61,11 @@ static VOID ME3_UnitResponse(me3UNIT_CONTROL *Uni, me3ANIM *Ani)
 
   FLT Dist, plen;
   DBL cosT, sinT, cosP, sinP, Azimuth, Elevator;
+  DBL Wp, Hp, sx, sy;
+  VEC dv;
+
   Dist = VecLen(VecSubVec(ME3_RndCamAt, ME3_RndCamLoc));
- 
+
   cosT = (ME3_RndCamLoc.Y - ME3_RndCamAt.Y) / Dist;
   sinT = sqrt(1 - cosT * cosT);
  
@@ -85,16 +88,41 @@ static VOID ME3_UnitResponse(me3UNIT_CONTROL *Uni, me3ANIM *Ani)
   if (Ani->KeysClick['P'])
     Ani->IsPause = !Ani->IsPause;
 
-  ME3_RndCamLoc =
+  Wp = ME3_RndProjSize;
+  Hp = ME3_RndProjSize;
+
+  if (Ani->W > Ani->H)
+    Wp *= (FLT)Ani->W / Ani->H;
+  else
+    Hp *= (FLT)Ani->H / Ani->W;
+  sx = Ani->Keys[VK_RBUTTON] * -Ani->Mdx * Wp / Ani->W * Dist / ME3_RndProjDist;
+  sy = Ani->Keys[VK_RBUTTON] * Ani->Mdy * Hp / Ani->H * Dist / ME3_RndProjDist;
+
+  dv = VecAddVec(VecMulNum(ME3_RndCamRight, sx),
+                   VecMulNum(ME3_RndCamUp, sy));
+  ME3_RndCamAt = VecAddVec(ME3_RndCamAt, dv);
+  ME3_RndCamLoc = VecAddVec(ME3_RndCamLoc, dv);
+  
+  ME3_RndCamLoc = PointTransform(VecSet(0, Dist, 0),
+                        MatrMulMatr(MatrRotateX(Elevator),
+                                    MatrRotateY(Azimuth)));
+ 
+  ME3_RndCamSet(PointTransform(VecSet(0, Dist, 0),
+                             MatrMulMatr3(MatrRotateX(Elevator),
+                                          MatrRotateY(Azimuth),
+                                          MatrTranslate(ME3_RndCamAt))),
+                                          ME3_RndCamAt,
+                                          VecSet(0, 1, 0));
+  /*ME3_RndCamLoc =
     PointTransform(VecSet(0, Dist, 0),
       MatrMulMatr(MatrRotateX(Elevator),
-                  MatrRotateY(Azimuth)));
+                  MatrRotateY(Azimuth)));*/
   
   /*ME3_RndCamLoc =
   PointTransform(VecSet(0, Dist, 0),
     MatrRotateX(Elevator));*/
   
-  ME3_RndCamSet(ME3_RndCamLoc, ME3_RndCamAt, VecSet(0, 1, 0));
+  /*ME3_RndCamSet(ME3_RndCamLoc, ME3_RndCamAt, VecSet(0, 1, 0));*/
 }
 
 static VOID ME3_UnitRender(me3UNIT_CONTROL *Uni, me3ANIM *Ani)

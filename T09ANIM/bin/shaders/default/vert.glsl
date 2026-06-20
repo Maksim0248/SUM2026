@@ -8,6 +8,7 @@ layout(location = 3) in vec4 InColor;
 uniform mat4 MatrWVP, MatrWN, MatrW;
 uniform float Time;
  
+out vec2 DrawTexCoord;
 out vec4 DrawColor;
 out vec3 DrawNormal;
 out vec3 DrawPos;
@@ -18,4 +19,5 @@ void main( void )
   DrawColor = InColor;
   DrawNormal = mat3(MatrWN) * InNormal;
   DrawPos = (MatrW * vec4(InPosition, 1)).xyz;
+  DrawTexCoord = InTexCoord;
 }

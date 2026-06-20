@@ -192,13 +192,14 @@ BOOL ME3_RndPrimsLoad( me3PRIMS *Prs, CHAR *FileName )
   }
  
   /* Materials */
-  mtls = (VOID *)ptr;
-  ptr += sizeof(*mtls) * NumOfMaterials;
+  mtls = (struct tagG3DM_MATERIAL *)ptr;
+  ptr += sizeof(struct tagG3DM_MATERIAL) * NumOfMaterials;
   for (m = 0; m < NumOfMaterials; m++)
   {
     me3MATERIAL mtl = ME3_RndMtlGetDef();
  
-    mtl.Ka = VecMinVec(mtls[m].Ka, VecSet1(0.1));
+    mtl.Ka = mtls[m].Ka;
+    //mtl.Ka = VecSet(1, 0, 1);
     mtl.Kd = mtls[m].Kd;
     mtl.Ks = mtls[m].Ks;
     mtl.Ph = mtls[m].Ph;

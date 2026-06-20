@@ -17,9 +17,12 @@ struct tagUNIT_COW
 
 static VOID ME3_UnitInit( me3UNIT_G3DM *Uni, me3ANIM *Ani )
 {
-  Uni->Pos = VecSet(0, 3, 1);
-  ME3_RndPrimsLoad(&Uni->Model, "bin/models/Minion2.g3dm");
+  INT i;
+  Uni->Pos = VecSet(3, 0, -2);
+  ME3_RndPrimsLoad(&Uni->Model, "bin/models/Spider-Man4.g3dm");
   Uni->Model.Trans = MatrRotateY(0);
+  /*for (i = 0; i < Uni->Model.NumOfPrims; i++)
+    Uni->Model.Prims[i].MtlNo = 0;*/
 }
 
 static VOID ME3_UnitResponse( me3UNIT_G3DM *Uni, me3ANIM *Ani )

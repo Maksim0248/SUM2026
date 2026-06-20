@@ -16,6 +16,7 @@ me3UNIT * ME3_UnitCreateGridBall( VOID );
 me3UNIT * ME3_UnitCreateTex( VOID );
 me3UNIT * ME3_UnitCreateWall( VOID );
 me3UNIT * ME3_UnitCreateG3dm( VOID );
+me3UNIT * ME3_UnitCreateGameCam( VOID );
 
 #endif /* __units_h_ */
 

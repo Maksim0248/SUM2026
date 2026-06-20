@@ -55,7 +55,7 @@ static VOID ME3_UnitInit(me3UNIT_TEX *Uni, me3ANIM *Ani)
   ME3_RndPrimCreate(&Uni->Pr, ME3_RND_PRIM_TRISTRIP, V, 4, NULL, 0);
   Uni->Pr.MtlNo = Uni->MtlNo;
 
-  if ((F = fopen("bin\\textures\\BRwall.g24", "rb")) != NULL)
+  if ((F = fopen("bin\\textures\\BRfloor.g24", "rb")) != NULL)
   {
     INT w = 0, h = 0;
     VOID *mem;
