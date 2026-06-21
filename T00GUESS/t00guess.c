@@ -10,34 +10,39 @@ void main( void )
   int a = 0;
   int m;
   int flag = 1;
+  int k;
 
   if (MessageBox(NULL, "Start?", "First question", MB_YESNO | MB_ICONQUESTION) == IDNO)
     return;
-  m = (a + b) / 2;
-  while (flag != 0)
+  while (flag == 1)
   {
-    sprintf(s, "Your number > %i (cancel if =)", m);
-    if (MessageBox(NULL, s, "Second question", MB_YESNOCANCEL | MB_ICONQUESTION) == IDYES)
+    if (a > b)
     {
-      m = (m + 1 + b) / 2;
+      MessageBox(NULL, "You are lier", "problem", MB_YESNOCANCEL | MB_ICONERROR);
+      flag = 0;
+      break;
+    }
+
+    m = (a + b) / 2;
+
+    sprintf(s, "Your number > %i (cancel if =)", m);
+
+    k = MessageBox(NULL, s, "question", MB_YESNOCANCEL | MB_ICONQUESTION);
+    if (k == IDYES)
+    {
+      a = m + 1;
       flag = 1;
     }
-    else
-    {
-      if (MessageBox(NULL, s, "Second question", MB_YESNOCANCEL | MB_ICONQUESTION) == IDNO)
+    if (k == IDNO)
       {
-        m = (a + (m - 1)) / 2;
+        b = m - 1;
         flag = 1;
-      }
-      else
-      {
-        if (MessageBox(NULL, s, "Second question", MB_YESNOCANCEL | MB_ICONQUESTION) == IDCANCEL)
-        {
-          flag = 0;
-          sprintf(s, "Your number is %i", m);
-          MessageBox(NULL, s, "Second question", MB_YESNO | MB_ICONQUESTION);
-        }
-      }
+    }
+    if (k == IDCANCEL)
+    {
+      flag = 0;
+      sprintf(s, "Your number is %i", m);
+      MessageBox(NULL, s, "Win", MB_YESNO | MB_ICONINFORMATION);
     }
   }
 }

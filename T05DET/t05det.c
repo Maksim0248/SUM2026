@@ -1,30 +1,33 @@
 /* Eremeev Maksim, 09-3, 03.06.2026 */
 
+#include <stdio.h>
+#include <string.h>
+#include <windows.h>
+
 typedef DOUBLE DBL;
 
 #define MAX 10
+
 DBL A[MAX][MAX];
 INT N;
-INT k;
 
 INT P[MAX];
-//INT AllP[MAX!]
-BOLL IsParity;
+BOOL IsParity;
+DBL Det;
 
-
-/*INT Factorial( int a )
+VOID Swap( INT *A, INT *B )
 {
-  INT n;
+  INT tmp = *A;
+  
+  *A = *B;
+  *B = tmp;
+}
 
-  if (a <= 1)
-    return ;
-
-  return a * Factorial(a - 1);
-}*/
 BOOL LoadMatrix( CHAR *FileName )
 {
   FILE *F;
- 
+  INT i, j;
+
   N = 0;
   if ((F = fopen(FileName, "r")) == NULL)
     return FALSE;
@@ -47,13 +50,17 @@ VOID Go( INT Pos )
 
   INT i;
 
-  if (Pos == MAX)
+  if (Pos == N)
   {
-    Det();
+    DBL prod = 1;
+
+    for (prod = 1, i = 0; i < N; i++)
+      prod *= A[i][P[i]];
+    Det += prod * (IsParity * 2 - 1);
   }
   else
   {
-    for (i = Pos; i < MAX; i++)
+    for (i = Pos; i < N; i++)
     {
       if (Pos != i)
         IsParity = !IsParity;
@@ -66,23 +73,20 @@ VOID Go( INT Pos )
   }
 }
 
-INT Det( VOID )
-{
-    for (prod = 1, i = 0; i < N; i++)
-      prod *= A[i][P[i]];
-    Det += prod * (IsParity * 2 - 1);
-}
 
 VOID main ( VOID )
 {
-  LoadMatrix("IN.TXT");
-
   FILE *F;
-  
+  INT i;
+
+  LoadMatrix("IN.TXT");
+  for (i = 0; i < N; i++)
+    P[i] = i;
+  IsParity = TRUE;
+  Go(0);
   F = fopen("PEREST.TXT", "a");/* a - write to end of file*/
   if (F == NULL)
     return;
-
-
-
+  fprintf(F, "%lf", Det);
+  fclose(F);
 }

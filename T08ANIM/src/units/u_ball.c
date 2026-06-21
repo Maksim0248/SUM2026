@@ -16,7 +16,7 @@ struct tagUNIT_BALL
 
 static VOID ME3_UnitInit(me3UNIT_BALL *Uni, me3ANIM *Ani)
 {
-  ME3_RndPrimCreateSphere(&Uni->Bl, 5, 10, 20);
+  ME3_RndPrimCreateSphere(&Uni->Bl, 5, 20, 10);
   Uni->Pos = VecSet(Rnd1(), Rnd1(), Rnd1());
 }
 

@@ -338,6 +338,18 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="map"
+				>
+				<File
+					RelativePath=".\src\map\map.c"
+					>
+				</File>
+				<File
+					RelativePath=".\src\map\map.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"

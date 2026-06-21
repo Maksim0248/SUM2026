@@ -22,18 +22,19 @@ static VOID ME3_UnitInit(me3UNIT_BKM *Uni, me3ANIM *Ani)
   me3VERTEX V[] =
   {
     {{0, 0, 0}, {0, 0}, {0, 0, 1}, {1, 1, 1, 1}},
-    {{20, 0, 0}, {1, 0}, {0, 0, 1}, {1, 1, 1, 1}},
-    {{0, 20, 0}, {0, 1}, {0, 0, 1}, {1, 1, 1, 1}},
-    {{20, 20, 0}, {1, 1}, {0, 0, 1}, {1, 1, 1, 1}},
+    {{5, 0, 0}, {1, 0}, {0, 0, 1}, {1, 1, 1, 1}},
+    {{0, 4.35, 0}, {0, 1}, {0, 0, 1}, {1, 1, 1, 1}},
+    {{5, 4.35, 0}, {1, 1}, {0, 0, 1}, {1, 1, 1, 1}},
   };
 
-  Uni->Pos = VecSet(10, 2, 6);
-  strcpy(mtl.Name, "BKMaze1");
-  mtl.ShdNo = ME3_RndShdAdd("tex");
-  mtl.Tex[2] = ME3_RndTexAddFromFile("bin/textures/BRwall.g24");
+
+  Uni->Pos = VecSet(0, -4, 9.7);
+  //strcpy(mtl.Name, "BKMaze1");
+  //mtl.ShdNo = ME3_RndShdAdd("tex");
+  //mtl.Tex[2] = ME3_RndTexAddFromFile("bin/textures/BRwall.g24");
 
   ME3_RndPrimCreate(&Uni->Pr, ME3_RND_PRIM_TRISTRIP, V, 4, NULL, 0);
-  Uni->Pr.MtlNo = ME3_RndMtlAdd(&mtl); /*add to array of mtl and back number in array*/
+  Uni->Pr.MtlNo = 0; /*add to array of mtl and back number in array*/
 }
 
 static VOID ME3_UnitResponse(me3UNIT_BKM *Uni, me3ANIM *Ani)

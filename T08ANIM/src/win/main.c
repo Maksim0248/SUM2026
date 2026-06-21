@@ -85,10 +85,14 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
 
   UpdateWindow(hWnd);
 
-  for (i = 0; i < 20; i++)
+  for (i = 0; i < 10; i++)
   {
     ME3_AnimUnitAdd(ME3_UnitCreateBall());
+
   }
+  ME3_AnimUnitAdd(ME3_UnitCreateMickey());
+  ME3_AnimUnitAdd(ME3_UnitCreateCyl());
+  ME3_AnimUnitAdd(ME3_UnitCreateTor());
 
   while (TRUE)
   {

@@ -250,6 +250,18 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\units\u_cyl.c"
+					>
+				</File>
+				<File
+					RelativePath=".\src\units\u_mickey.c"
+					>
+				</File>
+				<File
+					RelativePath=".\src\units\u_tor.c"
+					>
+				</File>
+				<File
 					RelativePath=".\src\units\units.h"
 					>
 				</File>

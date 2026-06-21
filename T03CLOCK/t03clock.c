@@ -45,30 +45,55 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
   return msg.wParam;
 }
 
-void DrawArrow2( HWND hWnd, HDC hDC, INT Xc, INT Yc, INT L, INT W, INT H )
+void DrawArrowSec( HDC hDC, INT Xc, INT Yc, double a )
 {
-  POINT pts[7] = {{-4, -10}, {4, -10}, {4, 6}, {10, 6}, {0, 14}, {-10, 6}, {-4, 6}};
+  POINT pts[4] = {{0, 0}, {10, -30}, {0, -350}, {-10, -30}};
   POINT pts_res[sizeof(pts) / sizeof(pts[0])]; 
   int N = sizeof(pts) / sizeof(pts[0]);
-  POINT pt;
   INT i;
-  DOUBLE x, y, len;
 
 
-  GetCursorPos(&pt);
-  ScreenToClient(hWnd, &pt);
-  len = hypot(pt.x - Xc, pt.y - Yc);
-  x = Xc + (pt.x - Xc) * L / len;
-  y = Yc + (pt.y - Yc) * L / len;
-  /*MoveToEx(hDC, Xc, Yc, NULL);
-  LineTo(hDC, x, y);*/
   for (i = 0; i < N; i++)
   {
-    pts_res[i].x = Xc + pts[i].x * (pt.y - Yc)/len + pts[i].y * (pt.x - Xc)/len;
-    pts_res[i].y = Yc + pts[i].y * (pt.y - Yc)/len - pts[i].x * (pt.x - Xc)/len;
+    pts_res[i].x = Xc + pts[i].x * cos(a) + pts[i].y * sin(a);
+    pts_res[i].y = Yc + pts[i].y * cos(a) - pts[i].x * sin(a);
   }
   Polygon(hDC, pts_res, N);
 }
+
+void DrawArrowMin( HDC hDC, INT Xc, INT Yc, double a )
+{
+  POINT pts[4] = {{0, 0}, {20, -30}, {0, -310}, {-20, -30}};
+  POINT pts_res[sizeof(pts) / sizeof(pts[0])]; 
+  int N = sizeof(pts) / sizeof(pts[0]);
+  INT i;
+
+
+  for (i = 0; i < N; i++)
+  {
+    pts_res[i].x = Xc + pts[i].x * cos(a) + pts[i].y * sin(a);
+    pts_res[i].y = Yc + pts[i].y * cos(a) - pts[i].x * sin(a);
+  }
+  Polygon(hDC, pts_res, N);
+}
+
+void DrawArrowHr( HDC hDC, INT Xc, INT Yc, double a )
+{
+  POINT pts[4] = {{0, 0}, {30, -30}, {0, -280}, {-30, -30}};
+  POINT pts_res[sizeof(pts) / sizeof(pts[0])]; 
+  int N = sizeof(pts) / sizeof(pts[0]);
+  INT i;
+
+
+  for (i = 0; i < N; i++)
+  {
+    pts_res[i].x = Xc + pts[i].x * cos(a) + pts[i].y * sin(a);
+    pts_res[i].y = Yc + pts[i].y * cos(a) - pts[i].x * sin(a);
+  }
+  Polygon(hDC, pts_res, N);
+}
+
+
 
 
 VOID FlipFullScreen( HWND hWnd )
@@ -142,7 +167,7 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
     hMemDC = CreateCompatibleDC(hDC);/*копия контекста экрана*/
     hMemClDC = CreateCompatibleDC(hDC);
     SetTimer(hWnd, 30, 10, NULL);
-    if ((hClBm = LoadImage(NULL, "me3_clock.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE)) == NULL)
+    if ((hClBm = LoadImage(NULL, "raccon_clock.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE)) == NULL)
     {
       SendMessage(hWnd, WM_CLOSE, 0, 0);
     }
@@ -176,33 +201,22 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
     hDC = GetDC(hWnd);
     Rectangle(hMemDC, 0, 0, W, H);
     BitBlt(hMemDC, (W - bm.bmWidth) / 2, (H - bm.bmHeight) / 2, bm.bmWidth, bm.bmHeight, hMemClDC, 0, 0, SRCCOPY);
-    SetStretchBltMode(hMemDC, COLORONCOLOR);
-    StretchBlt(hMemDC, W / 4, H / 8, W / 2, H / 1.3, hMemClDC, 0, 0, bm.bmWidth, bm.bmHeight, SRCCOPY);
+    //SetStretchBltMode(hMemDC, COLORONCOLOR);
+    //StretchBlt(hMemDC, W / 4, H / 8, W / 2, H / 1.3, hMemClDC, 0, 0, bm.bmWidth, bm.bmHeight, SRCCOPY);
     GetLocalTime(&st);
     TextOut(hMemDC, W / 2.2, H / 1.1, Buf, sprintf(Buf, ">>> time: %d:%d:%d <<<", st.wHour, st.wMinute, st.wSecond));
     TextOut(hMemDC, W / 1.15, H / 1.05, Buf, sprintf(Buf, ">>> data: %d.%d.%d <<<", st.wDay, st.wMonth, st.wYear));
     /*Draw arrow*/
     /*sec*/
     angle = st.wSecond * 2 * PI / 60;
-    x = Xc + lenm * sin(angle);
-    y = Yc - lenm * cos(angle);
-    MoveToEx(hMemDC, Xc, Yc, NULL);
     SetDCPenColor(hDC, RGB(200, 200, 0));
-    LineTo(hMemDC, x, y);
+    DrawArrowSec(hMemDC, Xc, Yc, -angle);
     /*minute*/
     angle = (st.wMinute + st.wSecond / 60.0) * 2 * PI / 60;
-    x = Xc + (lenm - 10) * sin(angle);
-    y = Yc - (lenm - 10) * cos(angle);
-    MoveToEx(hMemDC, Xc, Yc, NULL);
-    //DrawArrow2( hWnd, hMemDC, Xc, Yc, 1000, W, H);
-    LineTo(hMemDC, x, y);
+    DrawArrowMin(hMemDC, Xc, Yc, -angle);
     /* hour */
     angle = (st.wHour % 12 + st.wMinute / 60.0) * 2 * PI / 12;
-    x = Xc + lenh * sin(angle);
-    y = Yc - lenh * cos(angle);
-    MoveToEx(hMemDC, Xc, Yc, NULL);
-    LineTo(hMemDC, x, y);
-
+    DrawArrowHr(hMemDC, Xc, Yc, -angle);
     BitBlt(hDC, 0, 0, W, H, hMemDC, 0, 0, SRCCOPY);
     ReleaseDC(hWnd, hDC);
     return 0;

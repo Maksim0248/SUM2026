@@ -10,6 +10,9 @@
 #include "anim/anim.h"
 
 me3UNIT * ME3_UnitCreateBall( VOID );
+me3UNIT * ME3_UnitCreateMickey( VOID );
+me3UNIT * ME3_UnitCreateCyl( VOID );
+me3UNIT * ME3_UnitCreateTor( VOID );
 
 #endif /* __units_h_ */
 

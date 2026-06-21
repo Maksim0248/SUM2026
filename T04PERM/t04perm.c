@@ -8,7 +8,7 @@
 
 #define MAX 4
 INT P[MAX];
-BOOL IsParity = 0;
+BOOL IsParity = TRUE;
 
 VOID Store( VOID )
 {

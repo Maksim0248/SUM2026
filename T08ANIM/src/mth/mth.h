@@ -211,12 +211,12 @@ __inline MATR MatrRotateX( DBL AngleInDegree )
                  0, 0, 0, 1);
 }
 
-__inline MATR MatrRotateY( DBL AngleInDegree )
+__inline MATR MatrRotateY( FLT AngleInDegree )
 {
-  DBL co = cos(AngleInDegree);
-  DBL si = sin(AngleInDegree);
+  DBL A = D2R(AngleInDegree);
+  DBL co = cos(A);
+  DBL si = sin(A);
 
-  AngleInDegree = D2R(AngleInDegree);
 
   return MatrSet(co, 0, -si, 0,
                  0, 1, 0, 0,

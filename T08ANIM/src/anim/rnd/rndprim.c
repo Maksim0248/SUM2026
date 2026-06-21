@@ -94,6 +94,78 @@ BOOL ME3_RndPrimCreateSphere( me3PRIM *Pr, DBL R, INT W, INT H )
 
 
 
+BOOL ME3_RndPrimCreateCyl( me3PRIM *Pr, DBL R, INT Hcl, INT W, INT H )
+{
+  INT i, j, k;
+  DBL lvl, phi;
+ 
+  if (!ME3_RndPrimCreate(Pr, W * H, (H - 1) * (W - 1) * 2 * 3))
+    return FALSE;
+ 
+  /* Fill vertex array */
+  for (k = 0, i = 0; i < H; i++)
+  {
+    lvl = -Hcl / 2.0 + Hcl * i / (H - 1);
+
+    for (j = 0, phi = 0; j < W; j++, phi += 2 * PI / (W - 1))
+      Pr->V[k++].P = VecSet(R * sin(phi),
+      lvl,
+      R * cos(phi));
+  } 
+  /* Fill vertex array */
+  for (k = 0, i = 0; i < H - 1; i++)
+    for (j = 0; j < W - 1; j++)
+    {
+      /* bottom-left */
+      Pr->I[k++] = i * W + j;
+      Pr->I[k++] = i * W + j + 1;
+      Pr->I[k++] = (i + 1) * W + j;
+      /* top-right */
+      Pr->I[k++] = (i + 1) * W + j;
+      Pr->I[k++] = i * W + j + 1;
+      Pr->I[k++] = (i + 1) * W + j + 1;
+    }
+  return TRUE;
+} /* End of 'ME3_RndPrimCreateCyl' function */
+
+BOOL ME3_RndPrimCreateTor( me3PRIM *Pr, DBL R, DBL r, INT W, INT H )
+{
+  INT i, j, k;
+  DBL theta, phi;
+ 
+  if (!ME3_RndPrimCreate(Pr, W * H, (H - 1) * (W - 1) * 2 * 3))
+    return FALSE;
+ 
+  /* Fill vertex array */
+  for (k = 0, i = 0; i < H; i++)
+  {
+    theta = 2 * PI * i / (H - 1);
+
+    for (j = 0; j < W; j++)
+    {
+      phi = 2 * PI * j / (W - 1);
+
+      Pr->V[k++].P = VecSet((R + r * cos(phi)) * cos(theta),
+                             r * sin(phi),
+                             (R + r * cos(phi)) * sin(theta));
+  }
+} 
+  /* Fill vertex array */
+  for (k = 0, i = 0; i < H - 1; i++)
+    for (j = 0; j < W - 1; j++)
+    {
+      /* bottom-left */
+      Pr->I[k++] = i * W + j;
+      Pr->I[k++] = i * W + j + 1;
+      Pr->I[k++] = (i + 1) * W + j;
+      /* top-right */
+      Pr->I[k++] = (i + 1) * W + j;
+      Pr->I[k++] = i * W + j + 1;
+      Pr->I[k++] = (i + 1) * W + j + 1;
+    }
+  return TRUE;
+} /* End of 'ME3_RndPrimCreateTor' function */
+
 /* Primitive free function.
  * ARGUMENTS:
  *   - primitive to be load:

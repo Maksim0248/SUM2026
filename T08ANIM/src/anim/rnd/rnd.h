@@ -29,7 +29,6 @@ VOID ME3_RndProjSet( VOID );
 VOID ME3_RndCamSet( VEC Loc, VEC At, VEC Up );
 VOID ME3_RndEnd( VOID );
 VOID ME3_RndCopyFrame( HDC hDC );
-
 /*** Primitives ***/
 typedef struct tagme3VERTEX 
 {
@@ -52,6 +51,7 @@ BOOL ME3_RndPrimCreate( me3PRIM *Pr, INT NoofV, INT NoofI );
 VOID ME3_RndPrimDraw( me3PRIM *Pr, MATR World );
 BOOL ME3_RndPrimCreateSphere( me3PRIM *Pr, DBL R, INT W, INT H );
 BOOL ME3_RndPrimLoad( me3PRIM *Pr, CHAR *FileName );
-
+BOOL ME3_RndPrimCreateCyl( me3PRIM *Pr, DBL R, INT Hcl, INT W, INT H );
+BOOL ME3_RndPrimCreateTor( me3PRIM *Pr, DBL R, DBL r, INT W, INT H );
 
 #endif /* __rnd_h_ */

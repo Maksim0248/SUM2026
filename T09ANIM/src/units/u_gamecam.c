@@ -5,6 +5,7 @@
  */
 
 #include "units.h"
+#include "map/map.h"
 
 typedef struct tagUNIT_GAMECAM me3UNIT_GAMECAM;
 struct tagUNIT_GAMECAM
@@ -16,53 +17,62 @@ struct tagUNIT_GAMECAM
 
 static VOID ME3_UnitInit(me3UNIT_GAMECAM *Uni, me3ANIM *Ani)
 {
-  Uni->Speed = 10;
-  ME3_RndCamLoc = VecSet(0, 0, 0);
-  Uni->AngleSpeed = 0.008;
-  ME3_RndCamAt = VecSet(1, 0, 0);
+  Uni->Speed = 3;
+  Uni->AngleSpeed = 0.006;
+
+  ME3_RndCamLoc = VecSet(13, 0, 0);
+  ME3_RndCamDir = VecSet(-1, 0, 0);
+  ME3_RndCamAt = VecSet(-1, 0, 0);
   ME3_RndCamUp = VecSet(0, 1, 0);
 }
 
 static VOID ME3_UnitResponse(me3UNIT_GAMECAM *Uni, me3ANIM *Ani)
 {
-  /*DBL SpeedX;
-  SpeedX = 0;
+  static DBL Angle = 0, AngleY = 0;
+  VEC MoveDir;
+  VEC PreCL;
 
-  if (Ani->Keys[VK_DOWN] == 1)
-    SpeedX = -15;
-  if ((Ani->Keys[VK_DOWN] == 1) && (Ani->Keys[VK_SHIFT] == 1))
-    SpeedX = -50;
-  if (Ani->Keys[VK_UP] == 1)
-    SpeedX = 15;
-  if ((Ani->Keys[VK_UP] == 1) && (Ani->Keys[VK_SHIFT] == 1))
-    SpeedX = 50;
-  if (Ani->Keys[VK_RIGHT] == 1)
-    a += 0.1;
-  if (Ani->Keys[VK_LEFT] == 1)
-    a += -0.1;*/
-  //Uni->PosCam.X += SpeedX * Ani->DeltaTime;
-  //ME3_RndCamSet(VecAddVec(VecSet(0, 0, 0), Uni->PosCam), VecAddVec(VecSet(cos(a), 0, sin(a)), Uni->PosCam), VecSet(0, 1, 0));
-  /*
-  VEC d;
-  d = VecNormalize(VecSubVec(Uni->CamAt, Uni->CamLoc));
-  Uni->CamLoc =
-    VecAddVec(Uni->CamLoc,
-    VecMulNum(d, Ani->GlobalDeltaTime * (Uni->Speed + Ani->Keys[VK_SHIFT] * 30) *
-    (Ani->Keys[VK_UP] - Ani->Keys[VK_DOWN]) + Ani->Mdz / 50));
-  Uni->CamLoc =
-    PointTransform(Uni->CamLoc,
-    MatrRotateY(Ani->Keys[VK_LBUTTON] * Uni->AngleSpeed * Ani->Mdx));
-  ME3_RndCamSet(Uni->CamLoc, Uni->CamAt, VecSet(0, 1, 0));
-  */
-  FLT Dist;
+  Angle += Ani->Keys[VK_LBUTTON] * Ani->Mdx * Uni->AngleSpeed;
+  AngleY -= Ani->Keys[VK_LBUTTON] * Ani->Mdy * Uni->AngleSpeed;
+  if (AngleY > 0.3)
+    AngleY = 0.3;
+  if (AngleY < -0.3)
+    AngleY = -0.3;
 
-  Dist = VecLen(VecSubVec(ME3_RndCamAt, ME3_RndCamLoc));
-  Dist += Ani->GlobalDeltaTime * 50 * (Ani->Keys['W']);
-  Dist -= Ani->GlobalDeltaTime * 50 * (Ani->Keys['S']);
 
-  //ME3_RndCamLoc = PointTransform(VecSet(0, Dist, 0), abs(sin(Ani->GlobalTime)),);
+  ME3_RndCamDir.X = cos(Angle) * cos(AngleY);
+  ME3_RndCamDir.Z = sin(Angle) * cos(AngleY);
+  ME3_RndCamDir.Y = sin(AngleY);
+
+  MoveDir.X = cos(Angle);
+  MoveDir.Z = sin(Angle);
+  MoveDir.Y = 0;
+
+
+  MoveDir = VecNormalize(MoveDir);
+
+  ME3_RndCamRight = VecNormalize(VecCrossVec(ME3_RndCamDir, VecSet(0, 1, 0)));
  
-  //ME3_RndCamSet(ME3_RndCamLoc, VecSet(1, 0, 0), VecSet(0, 1, 0));
+  ME3_RndCamUp = VecSet(0, 1, 0);
+
+  if (Ani->Keys['W'])
+  {
+    PreCL = VecAddVec(ME3_RndCamLoc, VecMulNum(MoveDir, Uni->Speed * Ani->GlobalDeltaTime));
+    if (!ME3_CaminWall(PreCL.X, PreCL.Z))
+      ME3_RndCamLoc = PreCL;
+  }
+
+  if (Ani->Keys['S'])
+  {
+    PreCL = VecSubVec(ME3_RndCamLoc, VecMulNum(MoveDir, Uni->Speed * Ani->GlobalDeltaTime));
+    if (!ME3_CaminWall(PreCL.X, PreCL.Z))
+      ME3_RndCamLoc = PreCL;
+  }
+
+  ME3_RndCamSet(ME3_RndCamLoc,
+    VecAddVec(ME3_RndCamLoc, ME3_RndCamDir),
+    ME3_RndCamUp
+  );
 }
 
 static VOID ME3_UnitRender(me3UNIT_GAMECAM *Uni, me3ANIM *Ani)
