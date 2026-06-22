@@ -109,13 +109,15 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
 
   UpdateWindow(hWnd);
 
-  ME3_AnimUnitAdd(ME3_UnitCreateBall());
+  //ME3_AnimUnitAdd(ME3_UnitCreateBall());
   ME3_AnimUnitAdd(ME3_UnitCreateGameCam());
   ME3_AnimUnitAdd(ME3_UnitCreateCow());
   //ME3_AnimUnitAdd(ME3_UnitCreateGridBall());
   ME3_AnimUnitAdd(ME3_UnitCreateWall());
+  ME3_AnimUnitAdd(ME3_UnitCreateFL());
   //ME3_AnimUnitAdd(ME3_UnitCreateTex());
-  //ME3_AnimUnitAdd(ME3_UnitCreateG3dm());
+  ME3_AnimUnitAdd(ME3_UnitCreateG3dm());
+  ME3_AnimUnitAdd(ME3_UnitCreateScr());
   while (TRUE)
   {
     if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))

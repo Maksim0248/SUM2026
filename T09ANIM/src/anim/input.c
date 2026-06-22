@@ -40,32 +40,47 @@ static VOID KeyboardResponse( VOID )
 {
   INT i;
 
-  GetKeyboardState(ME3_Anim.Keys);
-  for (i = 0; i < 256; i++)
+  if (ME3_ScrState == 0)
   {
-    ME3_Anim.Keys[i] >>= 7;
-    ME3_Anim.KeysClick[i] = ME3_Anim.Keys[i] && !OldKeys[i];
+    GetKeyboardState(ME3_Anim.Keys);
+    for (i = 0; i < 256; i++)
+    {
+      ME3_Anim.Keys[i] >>= 7;
+      ME3_Anim.KeysClick[i] = ME3_Anim.Keys[i] && !OldKeys[i];
+    }
+    memcpy(OldKeys, ME3_Anim.Keys, 256);
   }
-  memcpy(OldKeys, ME3_Anim.Keys, 256);
+  else
+  {
+    ME3_Anim.KeysClick['W'] = 0;
+    ME3_Anim.Keys['W'] = 0;
+    ME3_Anim.KeysClick['S'] = 0;
+    ME3_Anim.Keys['S'] = 0;
+
+  }
+
 }
 
 static VOID MouseResponse( VOID )
 {
   POINT pt;
  
-  GetCursorPos(&pt);
-  ScreenToClient(ME3_Anim.hWnd, &pt);
+  if (ME3_ScrState == 0)
+  {
+    GetCursorPos(&pt);
+    ScreenToClient(ME3_Anim.hWnd, &pt);
  
-  /* приращение координат на экране */
-  ME3_Anim.Mdx = pt.x - ME3_Anim.Mx;
-  ME3_Anim.Mdy = pt.y - ME3_Anim.My;
-  /* абсолютные значения */
-  ME3_Anim.Mx = pt.x;
-  ME3_Anim.My = pt.y;
+    /* приращение координат на экране */
+    ME3_Anim.Mdx = pt.x - ME3_Anim.Mx;
+    ME3_Anim.Mdy = pt.y - ME3_Anim.My;
+    /* абсолютные значения */
+    ME3_Anim.Mx = pt.x;
+    ME3_Anim.My = pt.y;
 
-  ME3_Anim.Mdz = ME3_MouseWheel;
-  ME3_Anim.Mz += ME3_MouseWheel;
-  ME3_MouseWheel = 0;
+    ME3_Anim.Mdz = ME3_MouseWheel;
+    ME3_Anim.Mz += ME3_MouseWheel;
+    ME3_MouseWheel = 0;
+  }
 }
 
 VOID ME3_AnimInputInit( VOID )

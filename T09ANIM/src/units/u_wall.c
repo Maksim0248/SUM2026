@@ -22,13 +22,13 @@ static VOID ME3_UnitInit(me3UNIT_BKM *Uni, me3ANIM *Ani)
   me3VERTEX V[] =
   {
     {{0, 0, 0}, {0, 0}, {0, 0, 1}, {1, 1, 1, 1}},
-    {{5, 0, 0}, {1, 0}, {0, 0, 1}, {1, 1, 1, 1}},
+    {{0, 0, 5}, {1, 0}, {0, 0, 1}, {1, 1, 1, 1}},
     {{0, 4.35, 0}, {0, 1}, {0, 0, 1}, {1, 1, 1, 1}},
-    {{5, 4.35, 0}, {1, 1}, {0, 0, 1}, {1, 1, 1, 1}},
+    {{0, 4.35, 5}, {1, 1}, {0, 0, 1}, {1, 1, 1, 1}},
   };
 
 
-  Uni->Pos = VecSet(0, -4, 9.7);
+  Uni->Pos = VecSet(-10, -4, 0);
   //strcpy(mtl.Name, "BKMaze1");
   //mtl.ShdNo = ME3_RndShdAdd("tex");
   //mtl.Tex[2] = ME3_RndTexAddFromFile("bin/textures/BRwall.g24");

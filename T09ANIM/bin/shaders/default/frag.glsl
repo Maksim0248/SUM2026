@@ -156,7 +156,7 @@ void main( void )
   /* Очень слабое освещение всего мира.
    * Чтобы вне света не было абсолютно чёрно.
    */
-  vec3 Color = DiffColor * 1;
+  vec3 Color = DiffColor * 0.01;
 
   /* Добавляем свет от камеры.
    *
@@ -164,7 +164,7 @@ void main( void )
    * Diff      - угол к свету
    * F         - затухание по расстоянию
    */
-  Color += DiffColor * Diff * F * SpK;
+  Color += DiffColor * Diff * F * SpK * 2.5;
   Color += Ks * Spec * F * SpK;
 
   /* Выводим итоговый цвет. */

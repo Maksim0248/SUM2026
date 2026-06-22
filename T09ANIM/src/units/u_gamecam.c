@@ -17,10 +17,10 @@ struct tagUNIT_GAMECAM
 
 static VOID ME3_UnitInit(me3UNIT_GAMECAM *Uni, me3ANIM *Ani)
 {
-  Uni->Speed = 3;
+  Uni->Speed = 7;
   Uni->AngleSpeed = 0.006;
 
-  ME3_RndCamLoc = VecSet(13, 0, 0);
+  ME3_RndCamLoc = VecSet(2, 0, -5);
   ME3_RndCamDir = VecSet(-1, 0, 0);
   ME3_RndCamAt = VecSet(-1, 0, 0);
   ME3_RndCamUp = VecSet(0, 1, 0);
@@ -34,10 +34,10 @@ static VOID ME3_UnitResponse(me3UNIT_GAMECAM *Uni, me3ANIM *Ani)
 
   Angle += Ani->Keys[VK_LBUTTON] * Ani->Mdx * Uni->AngleSpeed;
   AngleY -= Ani->Keys[VK_LBUTTON] * Ani->Mdy * Uni->AngleSpeed;
-  if (AngleY > 0.3)
-    AngleY = 0.3;
-  if (AngleY < -0.3)
-    AngleY = -0.3;
+  if (AngleY > 0.4)
+    AngleY = 0.4;
+  if (AngleY < -0.5)
+    AngleY = -0.5;
 
 
   ME3_RndCamDir.X = cos(Angle) * cos(AngleY);

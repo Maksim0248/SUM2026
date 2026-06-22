@@ -108,9 +108,7 @@ BOOL ME3_RndPrimCreateCyl( me3PRIM *Pr, DBL R, INT Hcl, INT W, INT H )
     lvl = -Hcl / 2.0 + Hcl * i / (H - 1);
 
     for (j = 0, phi = 0; j < W; j++, phi += 2 * PI / (W - 1))
-      Pr->V[k++].P = VecSet(R * sin(phi),
-      lvl,
-      R * cos(phi));
+      Pr->V[k++].P = VecSet(R * sin(phi), lvl, R * cos(phi));
   } 
   /* Fill vertex array */
   for (k = 0, i = 0; i < H - 1; i++)

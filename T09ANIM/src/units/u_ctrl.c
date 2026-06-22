@@ -5,7 +5,7 @@
  */
 
 #include "units.h"
-
+#include <stdio.h>
 FLT a = 0;
 
 typedef struct tagUNIT_CONTROL me3UNIT_CONTROL;
@@ -127,6 +127,10 @@ static VOID ME3_UnitResponse(me3UNIT_CONTROL *Uni, me3ANIM *Ani)
 
 static VOID ME3_UnitRender(me3UNIT_CONTROL *Uni, me3ANIM *Ani)
 {
+  char s[100];
+
+  sprintf(s, "%f, %f, %f", ME3_RndCamLoc.X, ME3_RndCamLoc.Y, ME3_RndCamLoc.Z);
+  SetWindowText(Ani->hWnd, s);
 }
 
 static VOID ME3_UnitClose(me3UNIT_CONTROL *Uni, me3ANIM *Ani)

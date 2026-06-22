@@ -103,7 +103,7 @@ BOOL ME3_RndPrimsLoad( me3PRIMS *Prs, CHAR *FileName )
   DWORD NumOfPrims;
   DWORD NumOfMaterials;
   DWORD NumOfTextures;
-  INT i;
+
   struct tagG3DM_MATERIAL
   {
     CHAR Name[300]; /* Material name */
@@ -168,7 +168,6 @@ BOOL ME3_RndPrimsLoad( me3PRIMS *Prs, CHAR *FileName )
     DWORD MtlNo;
     me3VERTEX *V;
     INT *Ind;
-    UINT i;
  
     NumOfVertexes = *(DWORD *)ptr;
     ptr += 4;

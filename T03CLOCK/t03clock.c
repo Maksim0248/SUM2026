@@ -152,7 +152,7 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
   double angle;
 
   /*Descriptors*/
-  static HDC hDC;/*контекст окна*/
+  static HDC hDC;
 
   static HDC hMemDC; /*контекст растового изображения в памяти*/
   static HBITMAP hBm; /*растовое изображение(буффер) в памяти*/
@@ -164,7 +164,7 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
   {
   case WM_CREATE:
     hDC = GetDC(hWnd);
-    hMemDC = CreateCompatibleDC(hDC);/*копия контекста экрана*/
+    hMemDC = CreateCompatibleDC(hDC);
     hMemClDC = CreateCompatibleDC(hDC);
     SetTimer(hWnd, 30, 10, NULL);
     if ((hClBm = LoadImage(NULL, "raccon_clock.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE)) == NULL)
@@ -176,7 +176,7 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
     ReleaseDC(hWnd, hDC);
     return 0;
 
-  case WM_SIZE:/* идет сразу после create */
+  case WM_SIZE:
     W = LOWORD(lParam);
     H = HIWORD(lParam);
     Xc = W / 2 - 2;
@@ -184,7 +184,7 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
     if (hBm != NULL)
       DeleteObject(hBm);
     hDC = GetDC(hWnd);
-    hBm = CreateCompatibleBitmap(hDC, W, H);/*функция создает картинку в памяти*/
+    hBm = CreateCompatibleBitmap(hDC, W, H);
     SelectObject(hMemDC, hBm);
     SendMessage(hWnd, WM_TIMER, 30, 0);
 
@@ -244,7 +244,7 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
     return 0;
 
   case WM_CLOSE:
-    if (MessageBox(hWnd, "Are you sure close window?", "Exit", MB_YESNO | MB_ICONQUESTION) == IDNO)
+    if (MessageBox(hWnd, "Are you sure close window?", "Exit", MB _YESNO | MB_ICONQUESTION) == IDNO)
       return 0;
     break;
 

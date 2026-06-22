@@ -112,7 +112,7 @@ VOID ME3_RndResize( INT W, INT H )
 
 VOID ME3_RndStart( VOID )
 {
-  VEC4 ClearColor = {0.15, 0.1, 0.1, 1};
+  VEC4 ClearColor = {0.25, 0.1, 0.1, 1};
   FLT DepthClearValue = 1;
   
   ME3_RndShdUpdate();
