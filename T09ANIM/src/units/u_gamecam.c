@@ -17,7 +17,7 @@ struct tagUNIT_GAMECAM
 
 static VOID ME3_UnitInit(me3UNIT_GAMECAM *Uni, me3ANIM *Ani)
 {
-  Uni->Speed = 7;
+  Uni->Speed = 5;
   Uni->AngleSpeed = 0.006;
 
   ME3_RndCamLoc = VecSet(2, 0, -5);
@@ -32,28 +32,30 @@ static VOID ME3_UnitResponse(me3UNIT_GAMECAM *Uni, me3ANIM *Ani)
   VEC MoveDir;
   VEC PreCL;
 
-  Angle += Ani->Keys[VK_LBUTTON] * Ani->Mdx * Uni->AngleSpeed;
-  AngleY -= Ani->Keys[VK_LBUTTON] * Ani->Mdy * Uni->AngleSpeed;
-  if (AngleY > 0.4)
-    AngleY = 0.4;
-  if (AngleY < -0.5)
-    AngleY = -0.5;
+  if (!ME3_ScrState)
+  {
+    Angle += /*Ani->Keys[VK_LBUTTON] * */Ani->Mdx * Uni->AngleSpeed;
+    AngleY -= /*Ani->Keys[VK_LBUTTON] * */Ani->Mdy * Uni->AngleSpeed;
+    if (AngleY > 0.4)
+      AngleY = 0.4;
+    if (AngleY < -0.5)
+      AngleY = -0.5;
 
 
-  ME3_RndCamDir.X = cos(Angle) * cos(AngleY);
-  ME3_RndCamDir.Z = sin(Angle) * cos(AngleY);
-  ME3_RndCamDir.Y = sin(AngleY);
+    ME3_RndCamDir.X = cos(Angle) * cos(AngleY);
+    ME3_RndCamDir.Z = sin(Angle) * cos(AngleY);
+    ME3_RndCamDir.Y = sin(AngleY);
 
-  MoveDir.X = cos(Angle);
-  MoveDir.Z = sin(Angle);
-  MoveDir.Y = 0;
+    MoveDir.X = cos(Angle);
+    MoveDir.Z = sin(Angle);
+    MoveDir.Y = 0;
 
 
-  MoveDir = VecNormalize(MoveDir);
+    MoveDir = VecNormalize(MoveDir);
 
-  ME3_RndCamRight = VecNormalize(VecCrossVec(ME3_RndCamDir, VecSet(0, 1, 0)));
+    ME3_RndCamRight = VecNormalize(VecCrossVec(ME3_RndCamDir, VecSet(0, 1, 0)));
  
-  ME3_RndCamUp = VecSet(0, 1, 0);
+    ME3_RndCamUp = VecSet(0, 1, 0);
 
   if (Ani->Keys['W'])
   {
@@ -73,6 +75,7 @@ static VOID ME3_UnitResponse(me3UNIT_GAMECAM *Uni, me3ANIM *Ani)
     VecAddVec(ME3_RndCamLoc, ME3_RndCamDir),
     ME3_RndCamUp
   );
+  }
 }
 
 static VOID ME3_UnitRender(me3UNIT_GAMECAM *Uni, me3ANIM *Ani)

@@ -18,7 +18,6 @@ struct tagUNIT_BKM
 
 static VOID ME3_UnitInit(me3UNIT_BKM *Uni, me3ANIM *Ani)
 {
-  me3MATERIAL mtl = ME3_RndMtlGetDef();
   me3VERTEX V[] =
   {
     {{0, 0, 0}, {0, 0}, {0, 0, 1}, {1, 1, 1, 1}},

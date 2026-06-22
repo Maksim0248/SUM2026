@@ -19,7 +19,8 @@ me3UNIT * ME3_UnitCreateG3dm( VOID );
 me3UNIT * ME3_UnitCreateGameCam( VOID );
 me3UNIT * ME3_UnitCreateFL( VOID );
 me3UNIT * ME3_UnitCreateScr( VOID );
-
+me3UNIT * ME3_UnitCreateEnter( VOID );
+me3UNIT * ME3_UnitCreateMus( VOID );
 #endif /* __units_h_ */
 
 /* END OF 'units.h' FILE */

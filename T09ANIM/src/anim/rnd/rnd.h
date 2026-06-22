@@ -23,6 +23,8 @@ extern INT ME3_ScrState;
 extern MATR ME3_RndMatrView, ME3_RndMatrProj, ME3_RndMatrVP;
 extern HGLRC ME3_hRndGLRC; /* Open GL rendering context*/
 extern VEC ME3_RndCamLoc, ME3_RndCamAt, ME3_RndCamDir, ME3_RndCamRight, ME3_RndCamUp;
+extern VEC4 ClearColor;
+extern INT ME3_Win;
 
 VOID ME3_RndInit( HWND hWnd );
 VOID ME3_RndClose( VOID );

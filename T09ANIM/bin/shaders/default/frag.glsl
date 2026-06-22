@@ -79,51 +79,15 @@ void main( void )
   OutColor = vec4((color * 2), 1);
 }
 #endif
-#if  0
-void main(void)
-{
-  vec3 N = normalize(DrawNormal);
-  vec3 L = normalize(CamLoc - DrawPos);
-  vec3 R = reflect(-L, N);
-  vec3 DiffColor = Kd;
-  vec3 color = vec3(1, 0, 0);
-
-  if (IsTexture0)
-    DiffColor = texture(Tex, DrawTexCoord).rgb;
-
-  float Spot = dot(normalize(RndCamDir), -L);
-
-  float CutOff = 0.9;
-
-  float F;
-
-  if (Spot < CutOff)
-    F = 0;
-  else
-   F = 1;
-
-  vec3 V = normalize(DrawPos - CamLoc);
-
-  color = Shade(DrawPos, N, V, R, L, vec3(1, 1, 1), F);
-  //color += Shade(DrawPos, N, V, R, normalize(vec3(1, 1, 1)), vec3(1, 1, 0), 1);
-  OutColor = vec4((color * 2), 1);
-
- }
-#endif
 
 void main( void )
 {
-  vec3 N = normalize(DrawNormal);
-
-  /* Вектор от текущего пикселя к камере */
+  vec3 N = normalize(DrawNormal);          
   vec3 L = normalize(CamLoc - DrawPos);
   vec3 V = normalize(CamLoc - DrawPos);
   vec3 R = reflect(-L, N);
   float Spec = pow(max(dot(R, V), 0.0), Ph);
-
-  /* Базовый цвет материала
-   * Если текстуры нет - используем Kd
-   */
+     
   vec3 DiffColor = Kd;
 
   float Spot = max(dot(RndCamDir, -L), 0);
@@ -135,38 +99,20 @@ void main( void )
     SpK = (Spot - 0.8) / 0.1;
   else
     SpK = 0;
-
-  /* Если есть текстура,
-   * берём цвет из неё.
-   */
+     
   if (IsTexture0)
     DiffColor = texture(Tex, DrawTexCoord).rgb;
-
-  /* Расстояние от камеры до текущего пикселя.
-   * Чем дальше пиксель, тем меньше света.
-   */
+                                         
   float Dist = length(CamLoc - DrawPos);
-
-  /* Коэффициент яркости по расстоянию*/
+                                        
   float F = max(1.0 - Dist / 40.0, 0.0);
-
-  /* Диффузное освещение*/
+                           
   float Diff = max(dot(N, L), 0.0);
-
-  /* Очень слабое освещение всего мира.
-   * Чтобы вне света не было абсолютно чёрно.
-   */
+     
   vec3 Color = DiffColor * 0.01;
-
-  /* Добавляем свет от камеры.
-   *
-   * DiffColor - цвет материала
-   * Diff      - угол к свету
-   * F         - затухание по расстоянию
-   */
+     
   Color += DiffColor * Diff * F * SpK * 2.5;
   Color += Ks * Spec * F * SpK;
 
-  /* Выводим итоговый цвет. */
   OutColor = vec4(Color, 1.0);
 }

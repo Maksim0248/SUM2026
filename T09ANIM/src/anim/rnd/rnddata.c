@@ -16,5 +16,6 @@ HBITMAP ME3_hRndBmFrame;
 HGLRC ME3_hRndGLRC;
 VEC ME3_RndCamLoc, ME3_RndCamAt, ME3_RndCamDir, ME3_RndCamRight, ME3_RndCamUp;
 INT ME3_ScrState = 0;
-
+VEC4 ClearColor = {0.25, 0.1, 0.1, 1};
+INT ME3_Win = 0;
 MATR ME3_RndMatrView, ME3_RndMatrProj, ME3_RndMatrVP;

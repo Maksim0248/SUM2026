@@ -6,8 +6,11 @@
 
 #include <time.h>
 #include "units.h"
-
+#include <windows.h>
+#include <mmsystem.h>
+#pragma comment(lib, "winmm")
 DBL t = 0;
+INT Sndpl = 0;
 
 typedef struct tagUNIT_COW me3UNIT_G3DM;
 struct tagUNIT_COW
@@ -19,34 +22,70 @@ struct tagUNIT_COW
 
 static VOID ME3_UnitInit( me3UNIT_G3DM *Uni, me3ANIM *Ani )
 {
-  INT i;
   Uni->Pos = VecSet(-80, -120, -100);
   ME3_RndPrimsLoad(&Uni->Model, "bin/models/ghost.g3dm");
   Uni->Model.Trans = MatrRotateY(270);
+  mciSendString("open bin/snd/run.mp3 type mpegvideo alias rn", NULL, 0, NULL);
+  mciSendString("open bin/snd/JUMPSCARE.mp3 type mpegvideo alias abc", NULL, 0, NULL);
+  mciSendString("open bin/snd/miniJS.mp3 type mpegvideo alias minijs", NULL, 0, NULL);
   /*for (i = 0; i < Uni->Model.NumOfPrims; i++)
     Uni->Model.Prims[i].MtlNo = 0;*/
 }
 
 static VOID ME3_UnitResponse( me3UNIT_G3DM *Uni, me3ANIM *Ani )
 {
+  if (ME3_RndCamLoc.X < 3.4 && ME3_RndCamLoc.X > -3.4 && ME3_RndCamLoc.Z < 0 && ME3_RndCamLoc.Z > -3.5)
+  {
+    mciSendString("open bin/snd/JUMPSCARE.mp3 type mpegvideo alias abc", NULL, 0, NULL);
+    mciSendString("play abc", NULL, 0, NULL);
+    ME3_ScrState = 1;
+    ME3_RndCamSet(VecSet(-4, 0, -38), VecSet(10, -2, -38), VecSet(0, 1, 0));
+  }
+
 }
 
 static VOID ME3_UnitRender( me3UNIT_G3DM *Uni, me3ANIM *Ani )
 {
-  DBL D;
+  static INT MJ = 0;
 
-  if (ME3_RndCamLoc.Z > -3.7 && ME3_RndCamLoc.Z < 0)
-    ME3_RndPrimsDraw(&Uni->Model, MatrMulMatr(MatrMulMatr(MatrTranslate(Uni->Pos), MatrScale(VecSet(0.02, 0.02, 0.02))), MatrRotateX(sin(Ani->GlobalTime) * 10)));
-  if (ME3_RndCamLoc.X < 3.4 && ME3_RndCamLoc.X > -3.4 && ME3_RndCamLoc.Z < 0 && ME3_RndCamLoc.Z > -3.5)
+  if (ME3_RndCamLoc.Z > -3.5 && ME3_RndCamLoc.Z < 0)
   {
-    ME3_ScrState = 1;
-    ME3_RndCamSet(VecSet(-4, 0, -38), VecSet(-10, 0, -40), VecSet(0, 1, 0));
+    ME3_RndPrimsDraw(&Uni->Model, MatrMulMatr(MatrMulMatr(MatrTranslate(Uni->Pos), MatrScale(VecSet(0.02, 0.02, 0.02))), MatrRotateX(sin(Ani->GlobalTime) * 10)));
+    if (!MJ)
+    {
+      mciSendString("play minijs", NULL, 0, NULL);
+      MJ = 1;
+    }
   }
   if (ME3_RndCamLoc.Z < 3.5 && ME3_RndCamLoc.X < -6.8)
   {
-    t += 60 * Ani->DeltaTime;
-    ME3_RndPrimsDraw(&Uni->Model, MatrMulMatr(MatrRotateY(270), MatrMulMatr(MatrTranslate(VecAddVec(VecSet(-420, -120, 420), VecSet(0, 0, -t))), MatrScale(VecSet(0.02, 0.02, 0.02)))));
+    VEC pos1, posmin, posmax, pos2;
+
+    
+    t += 80 * Ani->DeltaTime;
+    pos1 = VecAddVec(VecSet(-430, -120, 530), VecSet(0, 0, -t));
+    pos2 = VecMulNum(VecAddVec(VecSet(-430, -120, 530), VecSet(0, 0, -t)), 0.02);
+    posmin = VecSet(pos2.X - 3, pos2.Y, pos2.Z - 3);
+    posmax = VecSet(pos2.X + 3, pos2.Y, pos2.Z + 3);
+    ME3_RndPrimsDraw(&Uni->Model, MatrMulMatr(MatrRotateY(270), MatrMulMatr(MatrTranslate(pos1), MatrScale(VecSet(0.02, 0.02, 0.02)))));
+    
+    if (!Sndpl)
+    {
+      mciSendString("play rn", NULL, 0, NULL);
+      Sndpl = 1;
+    }
+    if (ME3_RndCamLoc.X > posmin.X && ME3_RndCamLoc.Z > posmin.Z && ME3_RndCamLoc.X < posmax.X && ME3_RndCamLoc.Z < posmax.Z)
+    {
+      mciSendString("play abc", NULL, 0, NULL);
+ 
+      
+      //mciSendString("resume abc", NULL, 0, NULL);
+ 
+      ME3_ScrState = 1;
+      ME3_RndCamSet(VecSet(-4, 0, -38), VecSet(10, -2, -38), VecSet(0, 1, 0));
+    }
   }
+
 }
 
 static VOID ME3_UnitClose( me3UNIT_G3DM *Uni, me3ANIM *Ani )

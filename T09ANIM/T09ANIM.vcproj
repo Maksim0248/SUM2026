@@ -314,6 +314,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\units\u_enter.c"
+					>
+				</File>
+				<File
 					RelativePath=".\src\units\u_flashlight.c"
 					>
 				</File>
@@ -327,6 +331,10 @@
 				</File>
 				<File
 					RelativePath=".\src\units\u_gridball.c"
+					>
+				</File>
+				<File
+					RelativePath=".\src\units\u_music.c"
 					>
 				</File>
 				<File

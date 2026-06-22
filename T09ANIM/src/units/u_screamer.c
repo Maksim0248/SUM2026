@@ -12,7 +12,6 @@ struct tagUNIT_SCR
 
 static VOID ME3_UnitInit( me3UNIT_SCR *Uni, me3ANIM *Ani )
 {
-  INT i;
   Uni->Pos = VecSet(-40, -120, -1900);
   ME3_RndPrimsLoad(&Uni->Model, "bin/models/ghost.g3dm");
   Uni->Model.Trans = MatrRotateY(270);
@@ -26,7 +25,12 @@ static VOID ME3_UnitResponse( me3UNIT_SCR *Uni, me3ANIM *Ani )
 
 static VOID ME3_UnitRender( me3UNIT_SCR *Uni, me3ANIM *Ani )
 {
-  ME3_RndPrimsDraw(&Uni->Model, MatrMulMatr(MatrMulMatr(MatrTranslate(Uni->Pos), MatrScale(VecSet(0.02, 0.02, 0.02))), MatrRotateZ(abs(sin(Ani->GlobalTime * 20) * 5))));
+  MATR Rot;
+  if (ME3_Win)
+    Rot = MatrMulMatr(MatrRotateX(sin(Ani->GlobalTime * 3)), MatrRotateY(sin(Ani->GlobalTime * 3)));
+  else
+    Rot = MatrRotateZ(abs(sin(Ani->GlobalTime * 20) * 5));
+  ME3_RndPrimsDraw(&Uni->Model, MatrMulMatr(MatrMulMatr(MatrTranslate(Uni->Pos), MatrScale(VecSet(0.02, 0.02, 0.02))), Rot));
 }
 
 static VOID ME3_UnitClose( me3UNIT_SCR *Uni, me3ANIM *Ani )

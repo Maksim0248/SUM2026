@@ -27,13 +27,15 @@ static VOID ME3_UnitResponse( me3UNIT_G3DM *Uni, me3ANIM *Ani )
 {
   if (Ani->KeysClick['E'])
     k = !k;
+  if (ME3_ScrState)
+    k = 0;
 }
 
 static VOID ME3_UnitRender( me3UNIT_G3DM *Uni, me3ANIM *Ani )
 {
   MATR m = MatrMulMatr(MatrScale(VecSet(0.0008, 0.0008, 0.0008)), MatrTranslate(VecAddVec(ME3_RndCamLoc, VecSet(0, -0.6, 0))));
 
-  FLT Angle = R2D(acos(VecDotVec(VecNormalize(VecSet(1, 0, 0)), VecNormalize(ME3_RndCamDir))));
+  FLT Angle = R2D(atan2(ME3_RndCamDir.Z, ME3_RndCamDir.X));
 
   if (k)
     ME3_RndPrimsDraw(&Uni->Model, MatrMulMatr(MatrRotateY(270 - Angle), m));

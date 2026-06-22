@@ -115,9 +115,10 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
   //ME3_AnimUnitAdd(ME3_UnitCreateGridBall());
   ME3_AnimUnitAdd(ME3_UnitCreateWall());
   ME3_AnimUnitAdd(ME3_UnitCreateFL());
-  //ME3_AnimUnitAdd(ME3_UnitCreateTex());
+  ME3_AnimUnitAdd(ME3_UnitCreateEnter());
   ME3_AnimUnitAdd(ME3_UnitCreateG3dm());
   ME3_AnimUnitAdd(ME3_UnitCreateScr());
+  ME3_AnimUnitAdd(ME3_UnitCreateMus());
   while (TRUE)
   {
     if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -165,7 +166,7 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
   case WM_GETMINMAXINFO:
     minmax = (MINMAXINFO *)lParam;
     minmax->ptMaxTrackSize.y = GetSystemMetrics(SM_CYMAXTRACK) + GetSystemMetrics(SM_CYCAPTION) + GetSystemMetrics(SM_CYBORDER) * 2;
-    minmax->ptMaxTrackSize.x = 2000;
+    minmax->ptMaxTrackSize.x = 5000;
     return 0;
   case WM_COMMAND:
     return 0;
