@@ -155,6 +155,8 @@ VOID ME3_RndPrimDraw( me3PRIM *Pr, MATR World )
     glUniform3fv(loc, 1, &ME3_RndCamLoc.X);
   if ((loc = glGetUniformLocation(ProgId, "RndCamDir")) != -1)
     glUniform3fv(loc, 1, &ME3_RndCamDir.X);
+  if ((loc = glGetUniformLocation(ProgId, "IsFL")) != -1)
+    glUniform1i(loc, IsFL);
 
 
   glBindVertexArray(Pr->VA);/*activate*/

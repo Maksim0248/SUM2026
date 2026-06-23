@@ -9,7 +9,10 @@
 #include <windows.h>
 #include <mmsystem.h>
 #pragma comment(lib, "winmm")
-DBL t = 0;
+
+
+static DBL t = 0;
+static DBL k = 0;
 INT Sndpl = 0;
 
 typedef struct tagUNIT_COW me3UNIT_G3DM;
@@ -28,6 +31,7 @@ static VOID ME3_UnitInit( me3UNIT_G3DM *Uni, me3ANIM *Ani )
   mciSendString("open bin/snd/run.mp3 type mpegvideo alias rn", NULL, 0, NULL);
   mciSendString("open bin/snd/JUMPSCARE.mp3 type mpegvideo alias abc", NULL, 0, NULL);
   mciSendString("open bin/snd/miniJS.mp3 type mpegvideo alias minijs", NULL, 0, NULL);
+  mciSendString("open bin/snd/scr3.mp3 type mpegvideo alias s3", NULL, 0, NULL);
   /*for (i = 0; i < Uni->Model.NumOfPrims; i++)
     Uni->Model.Prims[i].MtlNo = 0;*/
 }
@@ -46,12 +50,12 @@ static VOID ME3_UnitResponse( me3UNIT_G3DM *Uni, me3ANIM *Ani )
 
 static VOID ME3_UnitRender( me3UNIT_G3DM *Uni, me3ANIM *Ani )
 {
-  static INT MJ = 0;
+  static INT MJ = 0, M3 = 0;
 
-  if (ME3_RndCamLoc.Z > -3.5 && ME3_RndCamLoc.Z < 0)
+  if (ME3_RndCamLoc.Z > -5 && ME3_RndCamLoc.Z < 1)
   {
     ME3_RndPrimsDraw(&Uni->Model, MatrMulMatr(MatrMulMatr(MatrTranslate(Uni->Pos), MatrScale(VecSet(0.02, 0.02, 0.02))), MatrRotateX(sin(Ani->GlobalTime) * 10)));
-    if (!MJ)
+    if (!MJ && ME3_RndCamLoc.Z > -3.5 && ME3_RndCamLoc.Z < 0)
     {
       mciSendString("play minijs", NULL, 0, NULL);
       MJ = 1;
@@ -62,7 +66,7 @@ static VOID ME3_UnitRender( me3UNIT_G3DM *Uni, me3ANIM *Ani )
     VEC pos1, posmin, posmax, pos2;
 
     
-    t += 80 * Ani->DeltaTime;
+    t += 140 * Ani->DeltaTime;
     pos1 = VecAddVec(VecSet(-430, -120, 530), VecSet(0, 0, -t));
     pos2 = VecMulNum(VecAddVec(VecSet(-430, -120, 530), VecSet(0, 0, -t)), 0.02);
     posmin = VecSet(pos2.X - 3, pos2.Y, pos2.Z - 3);
@@ -77,12 +81,21 @@ static VOID ME3_UnitRender( me3UNIT_G3DM *Uni, me3ANIM *Ani )
     if (ME3_RndCamLoc.X > posmin.X && ME3_RndCamLoc.Z > posmin.Z && ME3_RndCamLoc.X < posmax.X && ME3_RndCamLoc.Z < posmax.Z)
     {
       mciSendString("play abc", NULL, 0, NULL);
- 
-      
       //mciSendString("resume abc", NULL, 0, NULL);
  
       ME3_ScrState = 1;
       ME3_RndCamSet(VecSet(-4, 0, -38), VecSet(10, -2, -38), VecSet(0, 1, 0));
+    }
+  }
+  if ((ME3_RndCamLoc.X > 3.4 && ME3_RndCamLoc.X < 10) && (ME3_RndCamLoc.Z < 9.7 && ME3_RndCamLoc.Z > 7))
+  {
+
+    k += 5 * Ani->DeltaTime;
+    ME3_RndPrimsDraw(&Uni->Model, MatrMulMatr(MatrRotateY(90), MatrMulMatr(MatrScale(VecSet(0.02, 0.02, 0.02)), MatrTranslate(VecAddVec(VecSet(3.8, -2.5, 5.5), VecSet(k, 0, 0))))));
+    if (!M3)
+    {
+      mciSendString("play s3", NULL, 0, NULL);
+      M3 = 1;
     }
   }
 

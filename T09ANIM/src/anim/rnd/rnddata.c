@@ -19,3 +19,4 @@ INT ME3_ScrState = 0;
 VEC4 ClearColor = {0.25, 0.1, 0.1, 1};
 INT ME3_Win = 0;
 MATR ME3_RndMatrView, ME3_RndMatrProj, ME3_RndMatrVP;
+INT IsFL = 1;

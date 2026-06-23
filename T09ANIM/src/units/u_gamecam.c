@@ -34,8 +34,8 @@ static VOID ME3_UnitResponse(me3UNIT_GAMECAM *Uni, me3ANIM *Ani)
 
   if (!ME3_ScrState)
   {
-    Angle += /*Ani->Keys[VK_LBUTTON] * */Ani->Mdx * Uni->AngleSpeed;
-    AngleY -= /*Ani->Keys[VK_LBUTTON] * */Ani->Mdy * Uni->AngleSpeed;
+    Angle += Ani->Keys[VK_LBUTTON] * Ani->Mdx * 1.5 * Uni->AngleSpeed;
+    AngleY -= Ani->Keys[VK_LBUTTON] * Ani->Mdy * 1.5 * Uni->AngleSpeed;
     if (AngleY > 0.4)
       AngleY = 0.4;
     if (AngleY < -0.5)

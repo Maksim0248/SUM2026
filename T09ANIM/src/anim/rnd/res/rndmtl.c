@@ -43,7 +43,7 @@ VOID ME3_RndMtlClose( VOID )
 }
 
 
-INT ME3_RndMtlApply( INT MtlNo )
+UINT ME3_RndMtlApply( INT MtlNo )
 {
   INT i;
   INT prg;

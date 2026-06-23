@@ -244,7 +244,7 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam
     return 0;
 
   case WM_CLOSE:
-    if (MessageBox(hWnd, "Are you sure close window?", "Exit", MB _YESNO | MB_ICONQUESTION) == IDNO)
+    if (MessageBox(hWnd, "Are you sure close window?", "Exit", MB_YESNO | MB_ICONQUESTION) == IDNO)
       return 0;
     break;
 

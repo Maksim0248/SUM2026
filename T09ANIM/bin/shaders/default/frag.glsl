@@ -18,8 +18,11 @@ uniform float Trans;
 uniform vec3 CamLoc;
 uniform vec3 RndCamDir;
 uniform bool IsTexture0;
-
+uniform int IsFL;
 layout(binding = 0) uniform sampler2D Tex;
+
+
+#if 0
 
 vec3 Shade( vec3 P, vec3 N, vec3 V, vec3 R, vec3 L, vec3 LColor, float F )
 {
@@ -34,11 +37,10 @@ vec3 Shade( vec3 P, vec3 N, vec3 V, vec3 R, vec3 L, vec3 LColor, float F )
     Diff.rgb = texture(Tex, DrawTexCoord).rgb;
   color += F * LColor * Diff * max(0, dot(N, L)); 
   // Ks
-  color += F * LColor * Ks * max(0, pow(dot(R, L), Ph));    //блик
+  color += F * LColor * Ks * max(0, pow(dot(R, L), Ph));
   return color;
 } 
 
-#if 0
 void main( void )
 {
   vec3 N = normalize(DrawNormal); 
@@ -109,10 +111,10 @@ void main( void )
                            
   float Diff = max(dot(N, L), 0.0);
      
-  vec3 Color = DiffColor * 0.01;
-     
-  Color += DiffColor * Diff * F * SpK * 2.5;
-  Color += Ks * Spec * F * SpK;
+  vec3 Color = DiffColor * 0.1;
+ 
+ Color += DiffColor * Diff * F * SpK * 2.5 * IsFL;
+  Color += Ks * Spec * F * SpK * IsFL;
 
   OutColor = vec4(Color, 1.0);
 }

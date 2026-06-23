@@ -28,7 +28,17 @@ static VOID ME3_UnitResponse( me3UNIT_G3DM *Uni, me3ANIM *Ani )
   if (Ani->KeysClick['E'])
     k = !k;
   if (ME3_ScrState)
+  {
     k = 0;
+    IsFL = 1;
+  }
+  else
+  {
+    if (k == 0)
+      IsFL = 0;
+    if (k == 1)
+      IsFL = 1;
+  }
 }
 
 static VOID ME3_UnitRender( me3UNIT_G3DM *Uni, me3ANIM *Ani )
